@@ -9,6 +9,14 @@ import javax.sql.DataSource;
 import org.springframework.stereotype.Component;
 
 @Component
+/**
+ * SEQUENCE 헬퍼 유틸리티
+ *
+ * <p>DB 벤더(PostgreSQL, Altibase 등)에 따라 SEQUENCE nextval을 조회하는 SQL이 달라지므로,
+ * {@link #nextval(String)}에서 런타임에 DB 제품명을 확인하여 알맞은 쿼리를 생성합니다.
+ * 이 유틸은 서비스 계층에서 SEQ_ANALYZE_HISTORY, SEQ_ANALYZE_RESULT 등의 시퀀스 값을
+ * 미리 조회할 때 사용됩니다.
+ */
 public class SequenceHelper {
 
     private final DataSource dataSource;

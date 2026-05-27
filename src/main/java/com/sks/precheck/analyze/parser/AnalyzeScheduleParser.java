@@ -13,6 +13,14 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * 분석 스케줄 파일 파서
+ *
+ * <p>역할: PreCheck_AnalyzeLogs_Schedule.conf 파일을 파싱하여 AnalyzeScheduleVo 목록으로 반환합니다.
+ * - 공백/주석(#) 라인 무시
+ * - 라인 포맷은 [...] 토큰으로 구성되며, 토큰 수에 따라 sourceFilePath의 유무를 구분합니다.
+ * - 잘못된 포맷 라인은 WARN으로 기록하고 스킵합니다.
+ */
 public class AnalyzeScheduleParser {
 
     private static final Logger log = LogManager.getLogger(AnalyzeScheduleParser.class);
