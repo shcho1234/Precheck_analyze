@@ -17,34 +17,11 @@ import org.springframework.stereotype.Component;
 import jakarta.annotation.PostConstruct;
 
 /**
- * 분석 정책 로더
+ * 분석 정책 로더 — @PostConstruct 1회 로딩, 이후 "serverId:logId" 키로 O(1) 조회
  *
- * <p>역할:
- * - 서버 시작 시 (@PostConstruct) PreCheck_AnalyzePolicy.conf 파일을 1회 로딩
- * - 정책들을 메모리에 HashMap으로 저장 (serverId + logId를 키로)
- * - 분석 중에 정책을 O(1) 시간에 조회 가능
- *
- * <p>정책 파일 위치:
- * - 기본: {user.home}/cfg/PreCheck_AnalyzePolicy.conf
- * - 예) C:\\Users\\username\\cfg\\PreCheck_AnalyzePolicy.conf (Windows)
- * - 예) /home/username/cfg/PreCheck_AnalyzePolicy.conf (Linux)
- *
- * <p>정책 파일 형식:
- * [serverId][logId][로그타입][타입별 파라미터...]
- *
- * <p>로딩 동작:
- * 1. UTF-8로 파일 읽기
- * 2. 각 라인을 AnalyzePolicyParser로 파싱
- * 3. 포맷 불일치 라인은 WARN 로그만 기록하고 스킵
- * 4. 파싱 성공한 정책을 HashMap에 저장 (serverId:logId 키로)
- * 5. 로딩 완료 시 정책 건수 INFO 로그
- *
- * <p>주의:
- * - 파일이 없으면 빈 HashMap으로 초기화 (에러 아님)
- * - 분석 중 정책 미등록 LOG_ID는 LEVEL_UNANALYZED로 저장
- * - 정책 파일은 서버 시작 후 변경되지 않음 (재로딩 없음)
- *
- * @see AnalyzePolicyParser 정책 파일 라인 파싱\n */
+ * 파일 위치: {user.home}/cfg/PreCheck_AnalyzePolicy.conf
+ * 파일이 없으면 빈 맵으로 초기화(에러 아님). 파일은 서버 재시작 전까지 재로딩 없음.
+ */
 @Component
 public class PolicyLoader {
 

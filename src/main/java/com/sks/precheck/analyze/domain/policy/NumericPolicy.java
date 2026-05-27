@@ -11,6 +11,7 @@ public class NumericPolicy implements AnalyzePolicy {
 
     private String operator;
     private BigDecimal threshold;
+    // 임계치 대비 경고 발생 비율(%). 예) threshold=100, warningRatio=20 → [80, 100) 구간에서 LEVEL_WARNING
     private BigDecimal warningRatio;
 
     @Override

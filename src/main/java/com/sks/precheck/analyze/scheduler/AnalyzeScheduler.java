@@ -18,36 +18,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
- * 로그 분석 스케줄러
+ * 로그 분석 스케줄러 — 60초마다 실행, 스케줄 파일(PreCheck_AnalyzeLogs_Schedule.conf)을 읽어 분석 실행 시점을 판별
  *
- * <p>역할:
- * - 매 1분마다 (@Scheduled fixedDelay=60초) 실행
- * - PreCheck_AnalyzeLogs_Schedule.conf 파일에서 분석 스케줄 로드
- * - 배치/주기 스케줄별로 실행 시기 판별
- * - 실행 대상 스케줄을 AnalyzeService에 위임
- *
- * <p>스케줄 파일 형식 (PreCheck_AnalyzeLogs_Schedule.conf):
- * [serverId][sourceFilePath][스케줄타입][요일][시간][분]
- * - 배치: [SRV001][/logs/system.log][배치][MON,TUE,...][09][00]
- * - 주기: [SRV001][/logs/system.log][주기][월-일 범위][반복간격(분)]
- *
- * <p>스케줄 실행 판별:
- * 1. 스케줄 파일에서 모든 스케줄 로드 (1분마다, 캐시 60초)
- * 2. 각 스케줄마다:
- *    - 오늘 요일이 스케줄 요일에 포함되는가? (배치용)
- *    - 현재 시간이 스케줄 시간 범위 내인가? (1분 단위 poll window: +/- 30초)
- *    - 배치: 오늘 첫 1회만 실행 (lastBatchRunDate로 중복 실행 방지)
- *    - 주기: 주기 간격으로 반복 실행
- *
- * <p>실행 흐름:
- * 1. 스케줄 파일 로드 (메모리 캐시, 60초 유효)
- * 2. 각 스케줄 shouldRun 판별
- * 3. shouldRun=true인 스케줄 AnalyzeService.analyze() 호출
- * 4. 예외 발생 시 로그만 기록하고 다음 스케줄 처리
- *
- * <p>캐시 전략:
- * - 스케줄 파일은 최대 60초마다 재로드 (자주 변경되지 않는 설정 파일)
- * - 마지막 배치 실행 날짜는 메모리에 보관 (중복 실행 방지)\n */
+ * 스케줄 파일은 메모리에 최대 60초 캐싱된다(reloadIntervalMillis).
+ * 배치는 지정 요일 지정 시각에 하루 1회만 실행, 주기는 startTime~endTime 사이에 intervalMinutes 간격으로 반복 실행.
+ * 각 스케줄 실행의 중복 방지는 lastBatchRunDateByKey / lastPeriodicRunIndexByKey 맵으로 관리한다.
+ */
 @Component
 public class AnalyzeScheduler {
 
@@ -60,6 +36,7 @@ public class AnalyzeScheduler {
 
     private final String scheduleFilePath;
     private final long reloadIntervalMillis;
+    // volatile: @Scheduled 스레드와 캐시 갱신 시점 사이의 가시성 보장
     private volatile long lastReloadAtMillis;
     private volatile List<AnalyzeScheduleVo> cachedSchedules;
 
@@ -175,14 +152,17 @@ public class AnalyzeScheduler {
         }
 
         long intervalSeconds = (long) intervalMinutes * 60L;
-        long offsetSeconds = nowSeconds - startSeconds;
+        long offsetSeconds = nowSeconds - startSeconds;  // startTime 기준 경과 초
 
+        // runIndex: 몇 번째 주기 구간인지 (0-based)
+        // 스케줄러가 60s마다 실행되므로 각 구간의 첫 60s(pollWindowSeconds) 안에만 실행
         long runIndex = offsetSeconds / intervalSeconds;
         long remainder = offsetSeconds % intervalSeconds;
         if (remainder < 0 || remainder >= pollWindowSeconds) {
             return false;
         }
 
+        // 같은 runIndex에서 이미 실행했으면 스킵 (60s 안에 스케줄러가 두 번 이상 실행되는 경우 방지)
         String key = buildScheduleKey(schedule);
         Long lastIndex = lastPeriodicRunIndexByKey.get(key);
         if (lastIndex != null && lastIndex == runIndex) {
@@ -253,6 +233,8 @@ public class AnalyzeScheduler {
     }
 
     private int toDayDigit(DayOfWeek dayOfWeek) {
+        // DayOfWeek.getValue()는 ISO 표준 1(월)~7(일). %7로 일요일(7)→0, 월(1)~토(6) 유지
+        // conf 파일 요일 표기: 0=일, 1=월, ..., 6=토
         int value = dayOfWeek.getValue();
         return value % 7;
     }

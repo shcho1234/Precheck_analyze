@@ -27,30 +27,15 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 /**
- * 로그 분석 실행 서비스 (재시도 기능 포함)
+ * 실제 분석 수행 서비스
  *
- * <p>역할:
- * 1. TB_COLLECT_LOG에서 분석 대상 로그 조회
- * 2. 각 로그마다 분석 정책 매칭 및 분석 수행
- * 3. 분석 결과를 TB_ANALYZE_RESULT에 INSERT
- * 4. 분석 이력(TB_ANALYZE_HISTORY) 업데이트
- * 5. @Retryable로 실패 시 자동 재시도 (5분 간격, 최대 3회 재시도)
+ * AnalyzeException 발생 시 @Retryable이 5분(300s) 간격으로 최대 3회 재시도한다.
+ * maxAttempts=4 = 최초 1회 + 재시도 3회. 모두 실패하면 @Recover가 이력을 FAIL로 마감한다.
  *
- * <p>분석 흐름:
- * 1. TB_COLLECT_LOG 조회 (오늘 날짜, 서버별, 미분석 로그)
- * 2. 로그 타입별 분석기 선택 (PhraseAnalyzer, NumericAnalyzer, DateAnalyzer 등)
- * 3. 분석 정책 파일(PreCheck_AnalyzePolicy.conf)에서 정책 조회
- *    - 정책 미등록: LOG_ID가 정책 파일에 없으면 LEVEL_UNANALYZED로 저장
- * 4. 로그 타입별 분석 수행
- * 5. 분석 결과 TB_ANALYZE_RESULT INSERT
- * 6. 분석 이력 TB_ANALYZE_HISTORY 업데이트
- *
- * <p>@Retryable 동작:
- * - AnalyzeException 발생 시 5분 간격으로 최대 3회 재시도 (총 4회 시도)
- * - 최종 실패 시 @Recover 메서드 호출
- * - 명세서 요구사항: 5분 간격 3회 재시도 (최초 1회 + 실패 후 재시도 3회)
- *
- * @see AnalyzeService 분석 진입점 (이력 선등록)\n */
+ * 분석 대상 로그 조회 방식:
+ * - 배치: 오늘 날짜의 전체 로그(selectForAnalyze)
+ * - 주기: 마지막 성공 이력의 lastAnalyzeLogId 이후 신규 로그만(selectAfterLogId) — 중복 분석 방지
+ */
 @Service
 public class AnalyzeRetryService {
 
@@ -92,6 +77,7 @@ public class AnalyzeRetryService {
         this.infoAnalyzer = infoAnalyzer;
     }
 
+    // maxAttempts=4: 최초 1회 + 재시도 3회(300s 간격) = 명세서 "5분 간격 3회 재시도"
     @Retryable(
             retryFor = {AnalyzeException.class},
             maxAttempts = 4,
@@ -123,6 +109,8 @@ public class AnalyzeRetryService {
         String serverId = scheduleVo.getServerId();
         String sourceFilePath = scheduleVo.getSourceFilePath();
 
+        // 주기 스케줄: 마지막 성공 이력에서 lastAnalyzeLogId를 읽어 해당 이후 로그만 조회
+        // 이력이 없거나 배치 스케줄이면 오늘 전체 조회(selectForAnalyze)로 fallback
         Long lastAnalyzeLogId = null;
         if ("주기".equals(scheduleType)) {
             AnalyzeHistory lastSuccess = analyzeHistoryMapper.selectLastSuccess(serverId, sourceFilePath);

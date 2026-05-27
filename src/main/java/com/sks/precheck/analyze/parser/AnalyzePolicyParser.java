@@ -15,27 +15,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 /**
- * 분석 정책 파일 파서
+ * 분석 정책 파일(PreCheck_AnalyzePolicy.conf) 라인 파서
  *
- * <p>역할: PreCheck_AnalyzePolicy.conf 파일의 한 라인을 파싱하여 정책 객체 반환
- *
- * <p>정책 파일 형식 (PreCheck_AnalyzePolicy.conf):
- * [serverId][logId][로그타입][타입별 파라미터...]
- *
- * <p>타입별 포맷:
- * - 문구: [SRV001][ERROR_LOG][문구][keyword1,keyword2,keyword3]
- * - 수치: [SRV001][DISK_USAGE][수치][>][80][20]
- * - 날짜: [SRV001][BACKUP_DATE][날짜]
- * - 존재: [SRV001][FILE_CHECK][존재]
- * - 정보: [SRV001][DAILY_LOG][정보]
- *
- * <p>파싱 규칙:
- * - 공백 라인이나 #로 시작하는 주석은 무시
- * - 포맷이 맞지 않으면 null 반환 (에러 발생 안함)
- * - serverId/logId/logType 중 하나라도 없으면 null 반환
- * - 수치형 포맷이 6개가 아니면 null 반환 (threshold/warningRatio가 숫자가 아니면 null)
- *
- * @see PolicyLoader 서버 시작 시 정책 파일 전체 로딩
+ * 포맷: [serverId][logId][문구|수치|날짜|존재|정보][타입별 파라미터...]
+ * 파싱 실패 시 예외 대신 null을 반환하며, 호출자(PolicyLoader)가 해당 라인을 WARN 후 스킵한다.
  */
 @Component
 public class AnalyzePolicyParser {

@@ -14,6 +14,7 @@ public interface CollectLogMapper {
             @Param("sourceFilePath") String sourceFilePath
     );
 
+    // 주기 스케줄 전용 — afterCollectLogId 이후 신규 로그만 조회하여 중복 분석 방지
     List<CollectLog> selectAfterLogId(
             @Param("collectDate") String collectDate,
             @Param("serverId") String serverId,

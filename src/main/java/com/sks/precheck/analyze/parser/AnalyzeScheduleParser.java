@@ -14,12 +14,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * 분석 스케줄 파일 파서
+ * 분석 스케줄 파일(PreCheck_AnalyzeLogs_Schedule.conf) 파서
  *
- * <p>역할: PreCheck_AnalyzeLogs_Schedule.conf 파일을 파싱하여 AnalyzeScheduleVo 목록으로 반환합니다.
- * - 공백/주석(#) 라인 무시
- * - 라인 포맷은 [...] 토큰으로 구성되며, 토큰 수에 따라 sourceFilePath의 유무를 구분합니다.
- * - 잘못된 포맷 라인은 WARN으로 기록하고 스킵합니다.
+ * 포맷: [serverId][sourceFilePath][배치|주기|...]  또는 [serverId][배치|주기|...]
+ * serverId+sourceFilePath가 중복되면 파일 내 마지막 정의가 최종으로 적용된다(LinkedHashMap remove→put).
  */
 public class AnalyzeScheduleParser {
 
@@ -39,6 +37,8 @@ public class AnalyzeScheduleParser {
                     continue;
                 }
 
+                // remove 후 put: LinkedHashMap에서 기존 항목을 지우고 재삽입하여
+                // 삽입 순서를 파일 내 마지막 정의 기준으로 갱신 (중복 키는 마지막이 최종)
                 String key = buildDedupKey(schedule.getServerId(), schedule.getSourceFilePath());
                 scheduleByKey.remove(key);
                 scheduleByKey.put(key, schedule);

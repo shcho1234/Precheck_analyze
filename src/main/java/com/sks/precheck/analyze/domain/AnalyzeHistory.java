@@ -2,16 +2,6 @@ package com.sks.precheck.analyze.domain;
 
 import java.time.LocalDateTime;
 
-/**
- * 분석 실행 이력 DTO (TB_ANALYZE_HISTORY와 매핑)
- *
- * <p>분석 실행 단위(스케줄 단위) 별로 수행 결과 요약을 DB에 저장하기 위한 DTO입니다.
- * - analyzeHistoryId: SEQ_ANALYZE_HISTORY로 생성되는 PK
- * - totalCount/successCount/failCount 등: 분석 통계
- * - lastAnalyzeLogId: 이번 실행에서 마지막으로 처리한 COLLECT_LOG_ID
- * - analyzeStatus: SUCCESS/FAIL/PARTIAL
- * - failReason: 실패 사유 기록
- */
 public class AnalyzeHistory {
 
     private Long analyzeHistoryId;

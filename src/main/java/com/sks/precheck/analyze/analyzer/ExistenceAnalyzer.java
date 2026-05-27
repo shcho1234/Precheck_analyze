@@ -11,23 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 /**
- * 존재형 로그 분석기
- *
- * <p>명세서 - 분석 방식:
- * [존재] : 존재는 부존재일 경우에만 로그가 쌓이므로 에러
- * 즉, 이 로그 자체가 존재한다는 것은 대상 파일/프로세스가 없다는 뜻이므로 항상 에러
- *
- * <p>분석 결과:
- * - LEVEL_ERROR: 항상 에러 (존재형 로그는 문제 상황을 알리는 로그)
- *
- * <p>예시:
- * - LOG_ID="TEST_FILE_MISSING": "test.txt 파일이 존재하지 않음"
- * - 분석 결과: LEVEL_ERROR (파일이 없는 것 자체가 에러)
- *
- * <p>주의: 존재형 정책은 특별한 비교 조건이 없고, 로그가 쌓인 것 자체가 에러입니다.
- *
- * @see LogAnalyzer 분석기 인터페이스
- * @see ExistencePolicy 존재형 정책 DTO
+ * 존재형 로그 분석기 — 수집 로그 존재 자체가 대상 파일/프로세스 부재를 의미하므로 항상 LEVEL_ERROR
  */
 @Component
 public class ExistenceAnalyzer implements LogAnalyzer {

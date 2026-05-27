@@ -3,20 +3,6 @@ package com.sks.precheck.analyze.domain;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * 분석 결과 DTO (TB_ANALYZE_RESULT와 매핑)
- *
- * <p>이 클래스의 필드들은 DB 테이블 TB_ANALYZE_RESULT의 컬럼과 일대일로 매핑됩니다.
- * 분석 서버는 각 수집 로그 건(CollectLog)을 분석한 결과를 이 DTO로 구성한 뒤
- * {@code AnalyzeResultMapper.insert()}를 통해 DB에 저장합니다.
- *
- * 주요 필드 설명:
- * - analyzeResultId: SEQ_ANALYZE_RESULT로 생성되는 PK
- * - collectLogId: 원본 TB_COLLECT_LOG의 PK
- * - analyzeLevel: '정상'|'경고'|'에러'|'정보'|'미분석'
- * - analyzeMessage: 분석 결과 설명 메시지 (대시보드/통보에 사용)
- * - thresholdValue/thresholdOperator/warningRatio: 수치형 분석 상세 정보
- */
 public class AnalyzeResult {
 
     private Long analyzeResultId;
