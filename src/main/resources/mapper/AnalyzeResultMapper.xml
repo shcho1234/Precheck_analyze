@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    AnalyzeResultMapper.xml
+    TB_ANALYZE_RESULT 테이블 INSERT
+    INSERT 주체: 로그 분석 서버
+-->
+<mapper namespace="com.sks.precheck.analyze.mapper.AnalyzeResultMapper">
+
+    <!-- 분석 결과 1건 INSERT -->
+    <!-- SEQUENCE nextval은 서비스에서 미리 조회하여 파라미터로 전달한다 -->
+    <insert id="insert" parameterType="com.sks.precheck.analyze.domain.AnalyzeResult">
+        INSERT INTO TB_ANALYZE_RESULT (
+            ANALYZE_RESULT_ID,
+            COLLECT_LOG_ID,
+            SERVER_ID,
+            SERVER_IP,
+            LOG_TYPE,
+            LOG_ID,
+            LOG_TIMESTAMP,
+            LOG_CONTENT,
+            LOG_VALUE,
+            ANALYZE_LEVEL,
+            ANALYZE_MESSAGE,
+            THRESHOLD_VALUE,
+            THRESHOLD_OPERATOR,
+            WARNING_RATIO,
+            NOTIFY_YN,
+            ANALYZE_DATE,
+            ANALYZE_DATETIME,
+            COLLECT_DATE,
+            CREATED_AT
+        ) VALUES (
+            #{analyzeResultId},
+            #{collectLogId},
+            #{serverId},
+            #{serverIp},
+            #{logType},
+            #{logId},
+            #{logTimestamp},
+            #{logContent},
+            #{logValue},
+            #{analyzeLevel},
+            #{analyzeMessage},
+            #{thresholdValue},
+            #{thresholdOperator},
+            #{warningRatio},
+            COALESCE(#{notifyYn}, 'N'),
+            #{analyzeDate},
+            COALESCE(#{analyzeDatetime}, CURRENT_TIMESTAMP),
+            #{collectDate},
+            COALESCE(#{createdAt}, CURRENT_TIMESTAMP)
+        )
+    </insert>
+
+</mapper>

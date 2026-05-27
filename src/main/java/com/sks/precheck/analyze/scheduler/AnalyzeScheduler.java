@@ -1,0 +1,247 @@
+package com.sks.precheck.analyze.scheduler;
+
+import com.sks.precheck.analyze.common.exception.AnalyzeException;
+import com.sks.precheck.analyze.parser.AnalyzeScheduleParser;
+import com.sks.precheck.analyze.service.AnalyzeService;
+import com.sks.precheck.analyze.vo.AnalyzeScheduleVo;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+@Component
+public class AnalyzeScheduler {
+
+    private static final Logger log = LogManager.getLogger(AnalyzeScheduler.class);
+
+    private static final String DEFAULT_SCHEDULE_FILE_RELATIVE_PATH = "/cfg/PreCheck_AnalyzeLogs_Schedule.conf";
+
+    private final AnalyzeService analyzeService;
+    private final AnalyzeScheduleParser analyzeScheduleParser;
+
+    private final String scheduleFilePath;
+    private final long reloadIntervalMillis;
+    private volatile long lastReloadAtMillis;
+    private volatile List<AnalyzeScheduleVo> cachedSchedules;
+
+    private final Map<String, String> lastBatchRunDateByKey = new HashMap<>();
+    private final Map<String, Long> lastPeriodicRunIndexByKey = new HashMap<>();
+
+    public AnalyzeScheduler(
+            AnalyzeService analyzeService,
+            @Value("${precheck.analyze.schedule-file-path:}") String scheduleFilePath,
+            @Value("${precheck.analyze.scheduler.reload-interval-ms:60000}") long reloadIntervalMillis
+    ) {
+        this.analyzeService = analyzeService;
+        this.analyzeScheduleParser = new AnalyzeScheduleParser();
+        this.scheduleFilePath = (scheduleFilePath == null || scheduleFilePath.isBlank())
+                ? System.getProperty("user.home") + DEFAULT_SCHEDULE_FILE_RELATIVE_PATH
+                : scheduleFilePath;
+        this.reloadIntervalMillis = reloadIntervalMillis;
+    }
+
+    @Scheduled(fixedDelay = 60_000)
+    public void run() {
+        List<AnalyzeScheduleVo> schedules = getSchedules();
+        if (schedules == null || schedules.isEmpty()) {
+            return;
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        for (AnalyzeScheduleVo schedule : schedules) {
+            try {
+                if (shouldRun(schedule, now)) {
+                    analyzeService.analyze(schedule);
+                }
+            } catch (Exception e) {
+                log.error("분석 스케줄 실행 실패 - 서버: {}, 파일: {}", schedule.getServerId(), schedule.getSourceFilePath(), e);
+            }
+        }
+    }
+
+    private List<AnalyzeScheduleVo> getSchedules() {
+        long nowMillis = System.currentTimeMillis();
+        if (cachedSchedules != null && nowMillis - lastReloadAtMillis < reloadIntervalMillis) {
+            return cachedSchedules;
+        }
+
+        try {
+            List<AnalyzeScheduleVo> schedules = analyzeScheduleParser.parseScheduleFile(scheduleFilePath);
+            cachedSchedules = schedules;
+            lastReloadAtMillis = nowMillis;
+            return schedules;
+        } catch (AnalyzeException e) {
+            log.error("분석 스케줄 파일 파싱 실패 - file: {}", scheduleFilePath, e);
+            cachedSchedules = List.of();
+            lastReloadAtMillis = nowMillis;
+            return cachedSchedules;
+        }
+    }
+
+    private boolean shouldRun(AnalyzeScheduleVo schedule, LocalDateTime now) {
+        if (!isTodayMatched(schedule.getDayOfWeek(), now.toLocalDate())) {
+            return false;
+        }
+
+        int pollWindowSeconds = getPollWindowSeconds();
+        int nowSeconds = now.toLocalTime().toSecondOfDay();
+        int startSeconds = parseTime(schedule.getStartTime()).toSecondOfDay();
+
+        if ("배치".equals(schedule.getScheduleType())) {
+            return shouldRunBatch(schedule, now, nowSeconds, startSeconds, pollWindowSeconds);
+        }
+
+        return shouldRunPeriodic(schedule, nowSeconds, startSeconds, pollWindowSeconds);
+    }
+
+    private boolean shouldRunBatch(
+            AnalyzeScheduleVo schedule,
+            LocalDateTime now,
+            int nowSeconds,
+            int startSeconds,
+            int pollWindowSeconds
+    ) {
+        if (nowSeconds < startSeconds || nowSeconds >= startSeconds + pollWindowSeconds) {
+            return false;
+        }
+
+        String key = buildScheduleKey(schedule);
+        String today = now.toLocalDate().toString();
+        String lastRunDate = lastBatchRunDateByKey.get(key);
+        if (today.equals(lastRunDate)) {
+            return false;
+        }
+
+        lastBatchRunDateByKey.put(key, today);
+        log.info("배치 분석 실행 결정 - serverId: {}, file: {}, day: {}, start: {}",
+                schedule.getServerId(), schedule.getSourceFilePath(), schedule.getDayOfWeek(), schedule.getStartTime());
+        return true;
+    }
+
+    private boolean shouldRunPeriodic(
+            AnalyzeScheduleVo schedule,
+            int nowSeconds,
+            int startSeconds,
+            int pollWindowSeconds
+    ) {
+        Integer intervalMinutes = schedule.getIntervalMinutes();
+        String endTimeText = schedule.getEndTime();
+        if (intervalMinutes == null || endTimeText == null || endTimeText.isBlank()) {
+            return false;
+        }
+
+        int endSeconds = parseTime(endTimeText).toSecondOfDay();
+        if (nowSeconds < startSeconds || nowSeconds > endSeconds) {
+            return false;
+        }
+
+        long intervalSeconds = (long) intervalMinutes * 60L;
+        long offsetSeconds = nowSeconds - startSeconds;
+
+        long runIndex = offsetSeconds / intervalSeconds;
+        long remainder = offsetSeconds % intervalSeconds;
+        if (remainder < 0 || remainder >= pollWindowSeconds) {
+            return false;
+        }
+
+        String key = buildScheduleKey(schedule);
+        Long lastIndex = lastPeriodicRunIndexByKey.get(key);
+        if (lastIndex != null && lastIndex == runIndex) {
+            return false;
+        }
+
+        lastPeriodicRunIndexByKey.put(key, runIndex);
+        log.info("주기 분석 실행 결정 - serverId: {}, file: {}, 간격: {}분, {}번째 실행, day: {}, start: {}, end: {}",
+                schedule.getServerId(),
+                schedule.getSourceFilePath(),
+                intervalMinutes,
+                runIndex + 1,
+                schedule.getDayOfWeek(),
+                schedule.getStartTime(),
+                schedule.getEndTime());
+        return true;
+    }
+
+    private int getPollWindowSeconds() {
+        return 60;
+    }
+
+    private String buildScheduleKey(AnalyzeScheduleVo schedule) {
+        return schedule.getServerId()
+                + "::" + schedule.getSourceFilePath()
+                + "::" + schedule.getScheduleType()
+                + "::" + schedule.getDayOfWeek()
+                + "::" + schedule.getStartTime()
+                + "::" + schedule.getIntervalMinutes()
+                + "::" + schedule.getEndTime();
+    }
+
+    private boolean isTodayMatched(String daySpec, LocalDate date) {
+        if ("*".equals(daySpec)) {
+            return true;
+        }
+
+        int today = toDayDigit(date.getDayOfWeek());
+        if (daySpec != null && daySpec.contains("-")) {
+            String[] range = daySpec.split("-", -1);
+            if (range.length != 2) {
+                return false;
+            }
+            Integer start = parseDayDigit(range[0].trim());
+            Integer end = parseDayDigit(range[1].trim());
+            if (start == null || end == null) {
+                return false;
+            }
+            if (start == 0 && end == 6) {
+                return true;
+            }
+            return today >= start && today <= end;
+        }
+
+        Integer day = parseDayDigit(daySpec != null ? daySpec.trim() : null);
+        return day != null && day == today;
+    }
+
+    private Integer parseDayDigit(String text) {
+        if (text == null || text.length() != 1) {
+            return null;
+        }
+        char c = text.charAt(0);
+        if (c < '0' || c > '6') {
+            return null;
+        }
+        return c - '0';
+    }
+
+    private int toDayDigit(DayOfWeek dayOfWeek) {
+        int value = dayOfWeek.getValue();
+        return value % 7;
+    }
+
+    private LocalTime parseTime(String hhmmss) {
+        if (hhmmss == null || hhmmss.length() != 6) {
+            throw new AnalyzeException("시간 포맷 오류(HHmmss): " + hhmmss);
+        }
+
+        int hh;
+        int mm;
+        int ss;
+        try {
+            hh = Integer.parseInt(hhmmss.substring(0, 2));
+            mm = Integer.parseInt(hhmmss.substring(2, 4));
+            ss = Integer.parseInt(hhmmss.substring(4, 6));
+        } catch (NumberFormatException e) {
+            throw new AnalyzeException("시간 포맷 오류(HHmmss): " + hhmmss);
+        }
+
+        return LocalTime.of(hh, mm, ss);
+    }
+}

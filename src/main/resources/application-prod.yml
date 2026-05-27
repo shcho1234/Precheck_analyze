@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    driver-class-name: Altibase.jdbc.driver.AltibaseDriver
+    url: jdbc:Altibase://192.168.0.1:20300/precheck
+    username: precheck
+    password: precheck

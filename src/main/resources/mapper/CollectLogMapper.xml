@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    CollectLogMapper.xml
+    TB_COLLECT_LOG 테이블 SELECT 전용
+    SELECT 주체: 로그 분석 서버
+-->
+<mapper namespace="com.sks.precheck.analyze.mapper.CollectLogMapper">
+
+    <!-- [배치 분석] 분석 대상 로그 조회 (미분석 전체) -->
+    <select id="selectForAnalyze" resultType="com.sks.precheck.analyze.domain.CollectLog">
+        SELECT
+            CL.COLLECT_LOG_ID,
+            CL.SERVER_ID,
+            CL.SERVER_IP,
+            CL.SOURCE_FILE_PATH,
+            CL.LOG_TYPE,
+            CL.LOG_ID,
+            CL.LOG_TIMESTAMP,
+            CL.LOG_CONTENT,
+            CL.LOG_VALUE,
+            CL.RAW_LOG,
+            CL.COLLECT_DATE,
+            CL.COLLECT_DATETIME,
+            CL.SCHEDULE_TYPE,
+            CL.LINE_NUMBER,
+            CL.CREATED_AT
+        FROM TB_COLLECT_LOG CL
+        <where>
+            CL.COLLECT_DATE = #{collectDate}
+            AND CL.SERVER_ID = #{serverId}
+            <if test="sourceFilePath != null and sourceFilePath != ''">
+                AND CL.SOURCE_FILE_PATH = #{sourceFilePath}
+            </if>
+            AND NOT EXISTS (
+                SELECT 1
+                FROM TB_ANALYZE_RESULT AR
+                WHERE AR.COLLECT_LOG_ID = CL.COLLECT_LOG_ID
+            )
+        </where>
+        ORDER BY CL.COLLECT_LOG_ID ASC
+    </select>
+
+    <!-- [주기 분석] 특정 COLLECT_LOG_ID 이후 로그 조회 -->
+    <select id="selectAfterLogId" resultType="com.sks.precheck.analyze.domain.CollectLog">
+        SELECT
+            CL.COLLECT_LOG_ID,
+            CL.SERVER_ID,
+            CL.SERVER_IP,
+            CL.SOURCE_FILE_PATH,
+            CL.LOG_TYPE,
+            CL.LOG_ID,
+            CL.LOG_TIMESTAMP,
+            CL.LOG_CONTENT,
+            CL.LOG_VALUE,
+            CL.RAW_LOG,
+            CL.COLLECT_DATE,
+            CL.COLLECT_DATETIME,
+            CL.SCHEDULE_TYPE,
+            CL.LINE_NUMBER,
+            CL.CREATED_AT
+        FROM TB_COLLECT_LOG CL
+        <where>
+            CL.COLLECT_DATE = #{collectDate}
+            AND CL.SERVER_ID = #{serverId}
+            <if test="sourceFilePath != null and sourceFilePath != ''">
+                AND CL.SOURCE_FILE_PATH = #{sourceFilePath}
+            </if>
+            AND CL.COLLECT_LOG_ID &gt; #{afterCollectLogId}
+            AND NOT EXISTS (
+                SELECT 1
+                FROM TB_ANALYZE_RESULT AR
+                WHERE AR.COLLECT_LOG_ID = CL.COLLECT_LOG_ID
+            )
+        </where>
+        ORDER BY CL.COLLECT_LOG_ID ASC
+    </select>
+
+</mapper>

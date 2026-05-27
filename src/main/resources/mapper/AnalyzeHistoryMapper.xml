@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    AnalyzeHistoryMapper.xml
+    TB_ANALYZE_HISTORY 테이블 INSERT/UPDATE/SELECT
+    INSERT/UPDATE 주체: 로그 분석 서버
+    SELECT 주체: 로그 분석 서버 (주기 분석 시 마지막 성공 이력 조회)
+-->
+<mapper namespace="com.sks.precheck.analyze.mapper.AnalyzeHistoryMapper">
+
+    <!-- 분석 이력 1건 INSERT (선등록) -->
+    <!-- SEQUENCE nextval은 서비스에서 미리 조회하여 파라미터로 전달한다 -->
+    <insert id="insert" parameterType="com.sks.precheck.analyze.domain.AnalyzeHistory">
+        INSERT INTO TB_ANALYZE_HISTORY (
+            ANALYZE_HISTORY_ID,
+            SERVER_ID,
+            ANALYZE_TARGET_DATE,
+            SOURCE_FILE_PATH,
+            LAST_ANALYZE_LOG_ID,
+            ANALYZE_STATUS,
+            TOTAL_COUNT,
+            SUCCESS_COUNT,
+            FAIL_COUNT,
+            ERROR_COUNT,
+            WARNING_COUNT,
+            FAIL_REASON,
+            ANALYZE_START_AT,
+            ANALYZE_END_AT,
+            ANALYZE_DATE,
+            CREATED_AT,
+            UPDATED_AT
+        ) VALUES (
+            #{analyzeHistoryId},
+            #{serverId},
+            #{analyzeTargetDate},
+            #{sourceFilePath},
+            #{lastAnalyzeLogId},
+            #{analyzeStatus},
+            COALESCE(#{totalCount}, 0),
+            COALESCE(#{successCount}, 0),
+            COALESCE(#{failCount}, 0),
+            COALESCE(#{errorCount}, 0),
+            COALESCE(#{warningCount}, 0),
+            #{failReason},
+            #{analyzeStartAt},
+            #{analyzeEndAt},
+            #{analyzeDate},
+            COALESCE(#{createdAt}, CURRENT_TIMESTAMP),
+            #{updatedAt}
+        )
+    </insert>
+
+    <!-- 분석 이력 최종 UPDATE -->
+    <update id="update" parameterType="com.sks.precheck.analyze.domain.AnalyzeHistory">
+        UPDATE TB_ANALYZE_HISTORY
+        SET ANALYZE_STATUS = #{analyzeStatus},
+            LAST_ANALYZE_LOG_ID = #{lastAnalyzeLogId},
+            TOTAL_COUNT = COALESCE(#{totalCount}, 0),
+            SUCCESS_COUNT = COALESCE(#{successCount}, 0),
+            FAIL_COUNT = COALESCE(#{failCount}, 0),
+            ERROR_COUNT = COALESCE(#{errorCount}, 0),
+            WARNING_COUNT = COALESCE(#{warningCount}, 0),
+            FAIL_REASON = #{failReason},
+            ANALYZE_END_AT = #{analyzeEndAt},
+            UPDATED_AT = COALESCE(#{updatedAt}, CURRENT_TIMESTAMP)
+        WHERE ANALYZE_HISTORY_ID = #{analyzeHistoryId}
+    </update>
+
+    <!-- 주기 분석 시 마지막 성공 이력 조회 -->
+    <select id="selectLastSuccess" resultType="com.sks.precheck.analyze.domain.AnalyzeHistory">
+        SELECT
+            ANALYZE_HISTORY_ID,
+            SERVER_ID,
+            ANALYZE_TARGET_DATE,
+            SOURCE_FILE_PATH,
+            LAST_ANALYZE_LOG_ID,
+            ANALYZE_STATUS,
+            TOTAL_COUNT,
+            SUCCESS_COUNT,
+            FAIL_COUNT,
+            ERROR_COUNT,
+            WARNING_COUNT,
+            FAIL_REASON,
+            ANALYZE_START_AT,
+            ANALYZE_END_AT,
+            ANALYZE_DATE,
+            CREATED_AT,
+            UPDATED_AT
+        FROM TB_ANALYZE_HISTORY
+        <where>
+            ANALYZE_STATUS = 'SUCCESS'
+            AND SERVER_ID = #{serverId}
+            <choose>
+                <when test="sourceFilePath != null and sourceFilePath != ''">
+                    AND SOURCE_FILE_PATH = #{sourceFilePath}
+                </when>
+                <otherwise>
+                    AND SOURCE_FILE_PATH IS NULL
+                </otherwise>
+            </choose>
+        </where>
+        ORDER BY ANALYZE_START_AT DESC
+        FETCH FIRST 1 ROW ONLY
+    </select>
+
+</mapper>
