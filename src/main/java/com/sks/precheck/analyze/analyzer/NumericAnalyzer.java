@@ -36,7 +36,8 @@ import org.springframework.stereotype.Component;
  *
  * @see LogAnalyzer 분석기 인터페이스
  * @see NumericPolicy 수치형 정책 DTO
- */\n@Component
+ */
+@Component
 public class NumericAnalyzer implements LogAnalyzer {
 
     private static final Logger log = LogManager.getLogger(NumericAnalyzer.class);

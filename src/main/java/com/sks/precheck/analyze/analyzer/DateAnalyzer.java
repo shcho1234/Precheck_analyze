@@ -36,7 +36,8 @@ import org.springframework.stereotype.Component;
  *
  * @see LogAnalyzer 분석기 인터페이스
  * @see DatePolicy 날짜형 정책 DTO
- */\n@Component
+ */
+@Component
 public class DateAnalyzer implements LogAnalyzer {
 
     private static final Logger log = LogManager.getLogger(DateAnalyzer.class);

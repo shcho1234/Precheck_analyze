@@ -1,6 +1,8 @@
 spring:
   application:
     name: analyze
+  profiles:
+    active: test
 
 mybatis:
   mapper-locations: classpath:/mapper/*.xml

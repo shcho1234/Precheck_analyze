@@ -4,3 +4,6 @@ spring:
     url: jdbc:Altibase://192.168.0.1:20300/precheck
     username: precheck
     password: precheck
+precheck:
+  analyze:
+    log-file-path: C:/Users/20200161/Desktop/PreCheck_work/Precheck_project/Precheck_SKSCh1/precheck_collect/analyze/src/test/resources/logs

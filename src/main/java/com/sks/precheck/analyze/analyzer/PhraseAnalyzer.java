@@ -28,7 +28,8 @@ import org.springframework.stereotype.Component;
  *
  * @see LogAnalyzer 분석기 인터페이스
  * @see PhrasePolicy 문구형 정책 DTO
- */\n@Component
+ */
+@Component
 public class PhraseAnalyzer implements LogAnalyzer {
 
     private static final Logger log = LogManager.getLogger(PhraseAnalyzer.class);

@@ -36,7 +36,8 @@ import org.springframework.stereotype.Component;
  * - 수치형 포맷이 6개가 아니면 null 반환 (threshold/warningRatio가 숫자가 아니면 null)
  *
  * @see PolicyLoader 서버 시작 시 정책 파일 전체 로딩
- */\n@Component
+ */
+@Component
 public class AnalyzePolicyParser {
 
     private static final Logger log = LogManager.getLogger(AnalyzePolicyParser.class);

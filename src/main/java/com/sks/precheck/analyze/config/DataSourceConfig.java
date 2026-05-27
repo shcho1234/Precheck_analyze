@@ -27,10 +27,9 @@ import org.springframework.context.annotation.Profile;
  * 2. 운영: -Dspring.profiles.active=prod
  *
  * @see org.springframework.boot.autoconfigure.jdbc.DataSourceProperties DataSource 속성
- */\n@Configuration
+ */
+@Configuration
 public class DataSourceConfig {
-
-    private static final Logger log = LogManager.getLogger(DataSourceConfig.class);
 
     @Bean
     @Profile("test")

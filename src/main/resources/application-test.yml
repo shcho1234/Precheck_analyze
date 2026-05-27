@@ -6,3 +6,6 @@ spring:
     password: dnwls098!@#
     hikari:
       initialization-fail-timeout: -1
+precheck:
+  analyze:
+    log-file-path: C:/Users/20200161/Desktop/PreCheck_work/Precheck_project/Precheck_SKSCh1/precheck_collect/analyze/src/test/resources/logs

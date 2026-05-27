@@ -47,7 +47,8 @@ import org.springframework.stereotype.Component;
  *
  * <p>캐시 전략:
  * - 스케줄 파일은 최대 60초마다 재로드 (자주 변경되지 않는 설정 파일)
- * - 마지막 배치 실행 날짜는 메모리에 보관 (중복 실행 방지)\n */\n@Component
+ * - 마지막 배치 실행 날짜는 메모리에 보관 (중복 실행 방지)\n */
+@Component
 public class AnalyzeScheduler {
 
     private static final Logger log = LogManager.getLogger(AnalyzeScheduler.class);

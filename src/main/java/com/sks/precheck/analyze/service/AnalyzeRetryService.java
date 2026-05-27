@@ -50,7 +50,8 @@ import org.springframework.stereotype.Service;
  * - 최종 실패 시 @Recover 메서드 호출
  * - 명세서 요구사항: 5분 간격 3회 재시도 (최초 1회 + 실패 후 재시도 3회)
  *
- * @see AnalyzeService 분석 진입점 (이력 선등록)\n */\n@Service
+ * @see AnalyzeService 분석 진입점 (이력 선등록)\n */
+@Service
 public class AnalyzeRetryService {
 
     private static final Logger log = LogManager.getLogger(AnalyzeRetryService.class);

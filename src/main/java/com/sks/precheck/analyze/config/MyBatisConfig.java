@@ -21,7 +21,8 @@ import org.springframework.context.annotation.Configuration;
  *
  * <p>DB 설정:
  * - 테스트: application-test.yml → PostgreSQL (로컬)\n * - 운영: application-prod.yml → Altibase (원격)
- */\n@Configuration
+ */
+@Configuration
 @MapperScan("com.sks.precheck.analyze.mapper")
 public class MyBatisConfig {
     // MyBatis 커스텀 설정 (현재 기본값 사용)

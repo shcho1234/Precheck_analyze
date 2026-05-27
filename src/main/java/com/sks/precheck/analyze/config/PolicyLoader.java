@@ -44,7 +44,8 @@ import jakarta.annotation.PostConstruct;
  * - 분석 중 정책 미등록 LOG_ID는 LEVEL_UNANALYZED로 저장
  * - 정책 파일은 서버 시작 후 변경되지 않음 (재로딩 없음)
  *
- * @see AnalyzePolicyParser 정책 파일 라인 파싱\n */\n@Component
+ * @see AnalyzePolicyParser 정책 파일 라인 파싱\n */
+@Component
 public class PolicyLoader {
 
     private static final Logger log = LogManager.getLogger(PolicyLoader.class);
