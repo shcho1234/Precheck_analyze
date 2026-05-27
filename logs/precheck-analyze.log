@@ -173,3 +173,320 @@ Caused by: java.nio.file.NoSuchFileException: C:\Users\20200161\cfg\PreCheck_Ana
 2026-05-27 16:51:44.788 [Test worker] INFO  AnalyzeScheduleParser - 분석 스케줄 파일 파싱 시작 - filePath: C:\Users\20200161\AppData\Local\Temp\junit-7840257222822167493\PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\AppData\Local\Temp\junit-7840257222822167493\PreCheck_AnalyzeLogs_Schedule.conf
 2026-05-27 16:51:44.790 [Test worker] INFO  AnalyzeScheduleParser - 분석 스케줄 파일 파싱 완료 - absolutePath: C:\Users\20200161\AppData\Local\Temp\junit-7840257222822167493\PreCheck_AnalyzeLogs_Schedule.conf, 유효 스케줄 건수: 1
 2026-05-27 16:51:44.790 [Test worker] INFO  AnalyzeScheduleParser -   [1] serverId: dlprem01-테스트개발, sourceFilePath: null, type: 배치, day: 1-5, start: 093001, interval: null, end: null
+2026-05-27 17:42:13.619 [restartedMain] INFO  AnalyzeApplication - Starting AnalyzeApplication using Java 17.0.19 with PID 19776 (C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\build\classes\java\main started by 20200161 in C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze)
+2026-05-27 17:42:13.622 [restartedMain] INFO  AnalyzeApplication - No active profile set, falling back to 1 default profile: "default"
+2026-05-27 17:42:14.191 [restartedMain] ERROR LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Failed to configure a DataSource: 'url' attribute is not specified and no embedded datasource could be configured.
+
+Reason: Failed to determine a suitable driver class
+
+
+Action:
+
+Consider the following:
+	If you want an embedded database (H2, HSQL or Derby), please put it on the classpath.
+	If you have database settings to be loaded from a particular profile you may need to activate it (no profiles are currently active).
+
+2026-05-27 17:44:20.006 [restartedMain] INFO  AnalyzeApplication - Starting AnalyzeApplication using Java 17.0.19 with PID 24652 (C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\build\classes\java\main started by 20200161 in C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze)
+2026-05-27 17:44:20.009 [restartedMain] INFO  AnalyzeApplication - The following 1 profile is active: "test"
+2026-05-27 17:44:20.559 [restartedMain] WARN  PolicyLoader - 분석 정책 파일이 존재하지 않음: C:\Users\20200161\cfg\PreCheck_AnalyzePolicy.conf
+2026-05-27 17:44:20.800 [restartedMain] INFO  AnalyzeApplication - Started AnalyzeApplication in 1.072 seconds (process running for 1.564)
+2026-05-27 17:44:20.808 [scheduling-1] INFO  AnalyzeScheduleParser - 분석 스케줄 파일 파싱 시작 - filePath: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+2026-05-27 17:44:20.809 [scheduling-1] ERROR AnalyzeScheduleParser - 분석 스케줄 파일 읽기 실패 - filePath: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf, error: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+2026-05-27 17:44:20.810 [scheduling-1] ERROR AnalyzeScheduler - 분석 스케줄 파일 파싱 실패 - file: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf
+com.sks.precheck.analyze.common.exception.AnalyzeException: 분석 스케줄 파일 읽기 실패: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf
+	at com.sks.precheck.analyze.parser.AnalyzeScheduleParser.parseScheduleFile(AnalyzeScheduleParser.java:41) ~[main/:?]
+	at com.sks.precheck.analyze.scheduler.AnalyzeScheduler.getSchedules(AnalyzeScheduler.java:108) ~[main/:?]
+	at com.sks.precheck.analyze.scheduler.AnalyzeScheduler.run(AnalyzeScheduler.java:84) ~[main/:?]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569) ~[?:?]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.runInternal(ScheduledMethodRunnable.java:130) ~[spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.lambda$run$2(ScheduledMethodRunnable.java:124) ~[spring-context-6.2.18.jar:6.2.18]
+	at io.micrometer.observation.Observation.observe(Observation.java:498) [micrometer-observation-1.15.11.jar:1.15.11]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.run(ScheduledMethodRunnable.java:124) [spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.config.Task$OutcomeTrackingRunnable.run(Task.java:87) [spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54) [spring-context-6.2.18.jar:6.2.18]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) [?:?]
+	at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305) [?:?]
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) [?:?]
+	at java.base/java.lang.Thread.run(Thread.java:840) [?:?]
+Caused by: java.nio.file.NoSuchFileException: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:85) ~[?:?]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103) ~[?:?]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108) ~[?:?]
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.newByteChannel(WindowsFileSystemProvider.java:236) ~[?:?]
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:380) ~[?:?]
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:432) ~[?:?]
+	at java.base/java.nio.file.spi.FileSystemProvider.newInputStream(FileSystemProvider.java:422) ~[?:?]
+	at java.base/java.nio.file.Files.newInputStream(Files.java:160) ~[?:?]
+	at java.base/java.nio.file.Files.newBufferedReader(Files.java:2922) ~[?:?]
+	at java.base/java.nio.file.Files.readAllLines(Files.java:3412) ~[?:?]
+	at com.sks.precheck.analyze.parser.AnalyzeScheduleParser.parseScheduleFile(AnalyzeScheduleParser.java:27) ~[main/:?]
+	... 18 more
+2026-05-27 17:45:20.823 [scheduling-1] INFO  AnalyzeScheduleParser - 분석 스케줄 파일 파싱 시작 - filePath: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+2026-05-27 17:45:20.824 [scheduling-1] ERROR AnalyzeScheduleParser - 분석 스케줄 파일 읽기 실패 - filePath: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf, error: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+2026-05-27 17:45:20.824 [scheduling-1] ERROR AnalyzeScheduler - 분석 스케줄 파일 파싱 실패 - file: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf
+com.sks.precheck.analyze.common.exception.AnalyzeException: 분석 스케줄 파일 읽기 실패: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf
+	at com.sks.precheck.analyze.parser.AnalyzeScheduleParser.parseScheduleFile(AnalyzeScheduleParser.java:41) ~[main/:?]
+	at com.sks.precheck.analyze.scheduler.AnalyzeScheduler.getSchedules(AnalyzeScheduler.java:108) ~[main/:?]
+	at com.sks.precheck.analyze.scheduler.AnalyzeScheduler.run(AnalyzeScheduler.java:84) ~[main/:?]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569) ~[?:?]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.runInternal(ScheduledMethodRunnable.java:130) ~[spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.lambda$run$2(ScheduledMethodRunnable.java:124) ~[spring-context-6.2.18.jar:6.2.18]
+	at io.micrometer.observation.Observation.observe(Observation.java:498) [micrometer-observation-1.15.11.jar:1.15.11]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.run(ScheduledMethodRunnable.java:124) [spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.config.Task$OutcomeTrackingRunnable.run(Task.java:87) [spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54) [spring-context-6.2.18.jar:6.2.18]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) [?:?]
+	at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305) [?:?]
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) [?:?]
+	at java.base/java.lang.Thread.run(Thread.java:840) [?:?]
+Caused by: java.nio.file.NoSuchFileException: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:85) ~[?:?]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103) ~[?:?]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108) ~[?:?]
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.newByteChannel(WindowsFileSystemProvider.java:236) ~[?:?]
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:380) ~[?:?]
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:432) ~[?:?]
+	at java.base/java.nio.file.spi.FileSystemProvider.newInputStream(FileSystemProvider.java:422) ~[?:?]
+	at java.base/java.nio.file.Files.newInputStream(Files.java:160) ~[?:?]
+	at java.base/java.nio.file.Files.newBufferedReader(Files.java:2922) ~[?:?]
+	at java.base/java.nio.file.Files.readAllLines(Files.java:3412) ~[?:?]
+	at com.sks.precheck.analyze.parser.AnalyzeScheduleParser.parseScheduleFile(AnalyzeScheduleParser.java:27) ~[main/:?]
+	... 18 more
+2026-05-27 17:46:20.829 [scheduling-1] INFO  AnalyzeScheduleParser - 분석 스케줄 파일 파싱 시작 - filePath: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+2026-05-27 17:46:20.830 [scheduling-1] ERROR AnalyzeScheduleParser - 분석 스케줄 파일 읽기 실패 - filePath: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf, error: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+2026-05-27 17:46:20.831 [scheduling-1] ERROR AnalyzeScheduler - 분석 스케줄 파일 파싱 실패 - file: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf
+com.sks.precheck.analyze.common.exception.AnalyzeException: 분석 스케줄 파일 읽기 실패: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf
+	at com.sks.precheck.analyze.parser.AnalyzeScheduleParser.parseScheduleFile(AnalyzeScheduleParser.java:41) ~[main/:?]
+	at com.sks.precheck.analyze.scheduler.AnalyzeScheduler.getSchedules(AnalyzeScheduler.java:108) ~[main/:?]
+	at com.sks.precheck.analyze.scheduler.AnalyzeScheduler.run(AnalyzeScheduler.java:84) ~[main/:?]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569) ~[?:?]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.runInternal(ScheduledMethodRunnable.java:130) ~[spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.lambda$run$2(ScheduledMethodRunnable.java:124) ~[spring-context-6.2.18.jar:6.2.18]
+	at io.micrometer.observation.Observation.observe(Observation.java:498) [micrometer-observation-1.15.11.jar:1.15.11]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.run(ScheduledMethodRunnable.java:124) [spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.config.Task$OutcomeTrackingRunnable.run(Task.java:87) [spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54) [spring-context-6.2.18.jar:6.2.18]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) [?:?]
+	at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305) [?:?]
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) [?:?]
+	at java.base/java.lang.Thread.run(Thread.java:840) [?:?]
+Caused by: java.nio.file.NoSuchFileException: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:85) ~[?:?]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103) ~[?:?]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108) ~[?:?]
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.newByteChannel(WindowsFileSystemProvider.java:236) ~[?:?]
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:380) ~[?:?]
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:432) ~[?:?]
+	at java.base/java.nio.file.spi.FileSystemProvider.newInputStream(FileSystemProvider.java:422) ~[?:?]
+	at java.base/java.nio.file.Files.newInputStream(Files.java:160) ~[?:?]
+	at java.base/java.nio.file.Files.newBufferedReader(Files.java:2922) ~[?:?]
+	at java.base/java.nio.file.Files.readAllLines(Files.java:3412) ~[?:?]
+	at com.sks.precheck.analyze.parser.AnalyzeScheduleParser.parseScheduleFile(AnalyzeScheduleParser.java:27) ~[main/:?]
+	... 18 more
+2026-05-27 17:47:20.836 [scheduling-1] INFO  AnalyzeScheduleParser - 분석 스케줄 파일 파싱 시작 - filePath: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+2026-05-27 17:47:20.839 [scheduling-1] ERROR AnalyzeScheduleParser - 분석 스케줄 파일 읽기 실패 - filePath: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf, error: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+2026-05-27 17:47:20.841 [scheduling-1] ERROR AnalyzeScheduler - 분석 스케줄 파일 파싱 실패 - file: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf
+com.sks.precheck.analyze.common.exception.AnalyzeException: 분석 스케줄 파일 읽기 실패: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf
+	at com.sks.precheck.analyze.parser.AnalyzeScheduleParser.parseScheduleFile(AnalyzeScheduleParser.java:41) ~[main/:?]
+	at com.sks.precheck.analyze.scheduler.AnalyzeScheduler.getSchedules(AnalyzeScheduler.java:108) ~[main/:?]
+	at com.sks.precheck.analyze.scheduler.AnalyzeScheduler.run(AnalyzeScheduler.java:84) ~[main/:?]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569) ~[?:?]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.runInternal(ScheduledMethodRunnable.java:130) ~[spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.lambda$run$2(ScheduledMethodRunnable.java:124) ~[spring-context-6.2.18.jar:6.2.18]
+	at io.micrometer.observation.Observation.observe(Observation.java:498) [micrometer-observation-1.15.11.jar:1.15.11]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.run(ScheduledMethodRunnable.java:124) [spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.config.Task$OutcomeTrackingRunnable.run(Task.java:87) [spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54) [spring-context-6.2.18.jar:6.2.18]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) [?:?]
+	at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305) [?:?]
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) [?:?]
+	at java.base/java.lang.Thread.run(Thread.java:840) [?:?]
+Caused by: java.nio.file.NoSuchFileException: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:85) ~[?:?]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103) ~[?:?]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108) ~[?:?]
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.newByteChannel(WindowsFileSystemProvider.java:236) ~[?:?]
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:380) ~[?:?]
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:432) ~[?:?]
+	at java.base/java.nio.file.spi.FileSystemProvider.newInputStream(FileSystemProvider.java:422) ~[?:?]
+	at java.base/java.nio.file.Files.newInputStream(Files.java:160) ~[?:?]
+	at java.base/java.nio.file.Files.newBufferedReader(Files.java:2922) ~[?:?]
+	at java.base/java.nio.file.Files.readAllLines(Files.java:3412) ~[?:?]
+	at com.sks.precheck.analyze.parser.AnalyzeScheduleParser.parseScheduleFile(AnalyzeScheduleParser.java:27) ~[main/:?]
+	... 18 more
+2026-05-27 17:48:20.852 [scheduling-1] INFO  AnalyzeScheduleParser - 분석 스케줄 파일 파싱 시작 - filePath: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+2026-05-27 17:48:20.854 [scheduling-1] ERROR AnalyzeScheduleParser - 분석 스케줄 파일 읽기 실패 - filePath: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf, error: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+2026-05-27 17:48:20.856 [scheduling-1] ERROR AnalyzeScheduler - 분석 스케줄 파일 파싱 실패 - file: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf
+com.sks.precheck.analyze.common.exception.AnalyzeException: 분석 스케줄 파일 읽기 실패: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf
+	at com.sks.precheck.analyze.parser.AnalyzeScheduleParser.parseScheduleFile(AnalyzeScheduleParser.java:41) ~[main/:?]
+	at com.sks.precheck.analyze.scheduler.AnalyzeScheduler.getSchedules(AnalyzeScheduler.java:108) ~[main/:?]
+	at com.sks.precheck.analyze.scheduler.AnalyzeScheduler.run(AnalyzeScheduler.java:84) ~[main/:?]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569) ~[?:?]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.runInternal(ScheduledMethodRunnable.java:130) ~[spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.lambda$run$2(ScheduledMethodRunnable.java:124) ~[spring-context-6.2.18.jar:6.2.18]
+	at io.micrometer.observation.Observation.observe(Observation.java:498) [micrometer-observation-1.15.11.jar:1.15.11]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.run(ScheduledMethodRunnable.java:124) [spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.config.Task$OutcomeTrackingRunnable.run(Task.java:87) [spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54) [spring-context-6.2.18.jar:6.2.18]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) [?:?]
+	at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305) [?:?]
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) [?:?]
+	at java.base/java.lang.Thread.run(Thread.java:840) [?:?]
+Caused by: java.nio.file.NoSuchFileException: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:85) ~[?:?]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103) ~[?:?]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108) ~[?:?]
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.newByteChannel(WindowsFileSystemProvider.java:236) ~[?:?]
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:380) ~[?:?]
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:432) ~[?:?]
+	at java.base/java.nio.file.spi.FileSystemProvider.newInputStream(FileSystemProvider.java:422) ~[?:?]
+	at java.base/java.nio.file.Files.newInputStream(Files.java:160) ~[?:?]
+	at java.base/java.nio.file.Files.newBufferedReader(Files.java:2922) ~[?:?]
+	at java.base/java.nio.file.Files.readAllLines(Files.java:3412) ~[?:?]
+	at com.sks.precheck.analyze.parser.AnalyzeScheduleParser.parseScheduleFile(AnalyzeScheduleParser.java:27) ~[main/:?]
+	... 18 more
+2026-05-27 17:49:20.878 [scheduling-1] INFO  AnalyzeScheduleParser - 분석 스케줄 파일 파싱 시작 - filePath: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+2026-05-27 17:49:20.878 [scheduling-1] ERROR AnalyzeScheduleParser - 분석 스케줄 파일 읽기 실패 - filePath: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf, error: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+2026-05-27 17:49:20.878 [scheduling-1] ERROR AnalyzeScheduler - 분석 스케줄 파일 파싱 실패 - file: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf
+com.sks.precheck.analyze.common.exception.AnalyzeException: 분석 스케줄 파일 읽기 실패: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf
+	at com.sks.precheck.analyze.parser.AnalyzeScheduleParser.parseScheduleFile(AnalyzeScheduleParser.java:41) ~[main/:?]
+	at com.sks.precheck.analyze.scheduler.AnalyzeScheduler.getSchedules(AnalyzeScheduler.java:108) ~[main/:?]
+	at com.sks.precheck.analyze.scheduler.AnalyzeScheduler.run(AnalyzeScheduler.java:84) ~[main/:?]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569) ~[?:?]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.runInternal(ScheduledMethodRunnable.java:130) ~[spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.lambda$run$2(ScheduledMethodRunnable.java:124) ~[spring-context-6.2.18.jar:6.2.18]
+	at io.micrometer.observation.Observation.observe(Observation.java:498) [micrometer-observation-1.15.11.jar:1.15.11]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.run(ScheduledMethodRunnable.java:124) [spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.config.Task$OutcomeTrackingRunnable.run(Task.java:87) [spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54) [spring-context-6.2.18.jar:6.2.18]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) [?:?]
+	at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305) [?:?]
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) [?:?]
+	at java.base/java.lang.Thread.run(Thread.java:840) [?:?]
+Caused by: java.nio.file.NoSuchFileException: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:85) ~[?:?]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103) ~[?:?]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108) ~[?:?]
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.newByteChannel(WindowsFileSystemProvider.java:236) ~[?:?]
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:380) ~[?:?]
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:432) ~[?:?]
+	at java.base/java.nio.file.spi.FileSystemProvider.newInputStream(FileSystemProvider.java:422) ~[?:?]
+	at java.base/java.nio.file.Files.newInputStream(Files.java:160) ~[?:?]
+	at java.base/java.nio.file.Files.newBufferedReader(Files.java:2922) ~[?:?]
+	at java.base/java.nio.file.Files.readAllLines(Files.java:3412) ~[?:?]
+	at com.sks.precheck.analyze.parser.AnalyzeScheduleParser.parseScheduleFile(AnalyzeScheduleParser.java:27) ~[main/:?]
+	... 18 more
+2026-05-27 17:50:20.900 [scheduling-1] INFO  AnalyzeScheduleParser - 분석 스케줄 파일 파싱 시작 - filePath: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+2026-05-27 17:50:20.902 [scheduling-1] ERROR AnalyzeScheduleParser - 분석 스케줄 파일 읽기 실패 - filePath: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf, error: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+2026-05-27 17:50:20.903 [scheduling-1] ERROR AnalyzeScheduler - 분석 스케줄 파일 파싱 실패 - file: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf
+com.sks.precheck.analyze.common.exception.AnalyzeException: 분석 스케줄 파일 읽기 실패: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf
+	at com.sks.precheck.analyze.parser.AnalyzeScheduleParser.parseScheduleFile(AnalyzeScheduleParser.java:41) ~[main/:?]
+	at com.sks.precheck.analyze.scheduler.AnalyzeScheduler.getSchedules(AnalyzeScheduler.java:108) ~[main/:?]
+	at com.sks.precheck.analyze.scheduler.AnalyzeScheduler.run(AnalyzeScheduler.java:84) ~[main/:?]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569) ~[?:?]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.runInternal(ScheduledMethodRunnable.java:130) ~[spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.lambda$run$2(ScheduledMethodRunnable.java:124) ~[spring-context-6.2.18.jar:6.2.18]
+	at io.micrometer.observation.Observation.observe(Observation.java:498) [micrometer-observation-1.15.11.jar:1.15.11]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.run(ScheduledMethodRunnable.java:124) [spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.config.Task$OutcomeTrackingRunnable.run(Task.java:87) [spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54) [spring-context-6.2.18.jar:6.2.18]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) [?:?]
+	at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305) [?:?]
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) [?:?]
+	at java.base/java.lang.Thread.run(Thread.java:840) [?:?]
+Caused by: java.nio.file.NoSuchFileException: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:85) ~[?:?]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103) ~[?:?]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108) ~[?:?]
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.newByteChannel(WindowsFileSystemProvider.java:236) ~[?:?]
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:380) ~[?:?]
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:432) ~[?:?]
+	at java.base/java.nio.file.spi.FileSystemProvider.newInputStream(FileSystemProvider.java:422) ~[?:?]
+	at java.base/java.nio.file.Files.newInputStream(Files.java:160) ~[?:?]
+	at java.base/java.nio.file.Files.newBufferedReader(Files.java:2922) ~[?:?]
+	at java.base/java.nio.file.Files.readAllLines(Files.java:3412) ~[?:?]
+	at com.sks.precheck.analyze.parser.AnalyzeScheduleParser.parseScheduleFile(AnalyzeScheduleParser.java:27) ~[main/:?]
+	... 18 more
+2026-05-27 17:52:08.786 [restartedMain] INFO  AnalyzeApplication - Starting AnalyzeApplication using Java 17.0.19 with PID 4176 (C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\build\classes\java\main started by 20200161 in C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze)
+2026-05-27 17:52:08.786 [restartedMain] INFO  AnalyzeApplication - The following 1 profile is active: "test"
+2026-05-27 17:52:09.333 [restartedMain] WARN  PolicyLoader - 분석 정책 파일이 존재하지 않음: C:\Users\20200161\cfg\PreCheck_AnalyzePolicy.conf
+2026-05-27 17:52:09.561 [restartedMain] INFO  AnalyzeApplication - Started AnalyzeApplication in 1.076 seconds (process running for 1.562)
+2026-05-27 17:52:09.569 [scheduling-1] INFO  AnalyzeScheduleParser - 분석 스케줄 파일 파싱 시작 - filePath: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+2026-05-27 17:52:09.570 [scheduling-1] ERROR AnalyzeScheduleParser - 분석 스케줄 파일 읽기 실패 - filePath: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf, error: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+2026-05-27 17:52:09.571 [scheduling-1] ERROR AnalyzeScheduler - 분석 스케줄 파일 파싱 실패 - file: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf
+com.sks.precheck.analyze.common.exception.AnalyzeException: 분석 스케줄 파일 읽기 실패: C:\Users\20200161/cfg/PreCheck_AnalyzeLogs_Schedule.conf
+	at com.sks.precheck.analyze.parser.AnalyzeScheduleParser.parseScheduleFile(AnalyzeScheduleParser.java:41) ~[main/:?]
+	at com.sks.precheck.analyze.scheduler.AnalyzeScheduler.getSchedules(AnalyzeScheduler.java:108) ~[main/:?]
+	at com.sks.precheck.analyze.scheduler.AnalyzeScheduler.run(AnalyzeScheduler.java:84) ~[main/:?]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:?]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[?:?]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569) ~[?:?]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.runInternal(ScheduledMethodRunnable.java:130) ~[spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.lambda$run$2(ScheduledMethodRunnable.java:124) ~[spring-context-6.2.18.jar:6.2.18]
+	at io.micrometer.observation.Observation.observe(Observation.java:498) [micrometer-observation-1.15.11.jar:1.15.11]
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.run(ScheduledMethodRunnable.java:124) [spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.config.Task$OutcomeTrackingRunnable.run(Task.java:87) [spring-context-6.2.18.jar:6.2.18]
+	at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54) [spring-context-6.2.18.jar:6.2.18]
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) [?:?]
+	at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305) [?:?]
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) [?:?]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) [?:?]
+	at java.base/java.lang.Thread.run(Thread.java:840) [?:?]
+Caused by: java.nio.file.NoSuchFileException: C:\Users\20200161\cfg\PreCheck_AnalyzeLogs_Schedule.conf
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:85) ~[?:?]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103) ~[?:?]
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108) ~[?:?]
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.newByteChannel(WindowsFileSystemProvider.java:236) ~[?:?]
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:380) ~[?:?]
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:432) ~[?:?]
+	at java.base/java.nio.file.spi.FileSystemProvider.newInputStream(FileSystemProvider.java:422) ~[?:?]
+	at java.base/java.nio.file.Files.newInputStream(Files.java:160) ~[?:?]
+	at java.base/java.nio.file.Files.newBufferedReader(Files.java:2922) ~[?:?]
+	at java.base/java.nio.file.Files.readAllLines(Files.java:3412) ~[?:?]
+	at com.sks.precheck.analyze.parser.AnalyzeScheduleParser.parseScheduleFile(AnalyzeScheduleParser.java:27) ~[main/:?]
+	... 18 more
