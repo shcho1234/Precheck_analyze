@@ -10,7 +10,25 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-@Component
+/**
+ * 정보형 로그 분석기
+ *
+ * <p>명세서 - 분석 방식:
+ * [정보] : 분석 레벨이 아닌 저장용 타입이며 분석 결과 레벨에 포함되지 않는다
+ * 즉, 분석을 수행하지 않고 정보 내용 그대로 저장만 함
+ *
+ * <p>분석 결과:
+ * - LEVEL_INFO: 항상 정보 (분석 없음, 저장만)
+ *
+ * <p>예시:
+ * - LOG_ID="DAILY_REPORT": "일일 처리 리포트 저장 완료"
+ * - 분석 결과: LEVEL_INFO (분석 불필요, Dashboard 조회 용도)
+ *
+ * <p>용도: Dashboard에서 시스템 상태/진행 상황 조회, 통보 서버에서 제외
+ *
+ * @see LogAnalyzer 분석기 인터페이스
+ * @see InfoPolicy 정보형 정책 DTO
+ */\n@Component
 public class InfoAnalyzer implements LogAnalyzer {
 
     private static final Logger log = LogManager.getLogger(InfoAnalyzer.class);

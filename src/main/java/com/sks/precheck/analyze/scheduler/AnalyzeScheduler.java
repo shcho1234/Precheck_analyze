@@ -17,7 +17,37 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-@Component
+/**
+ * 로그 분석 스케줄러
+ *
+ * <p>역할:
+ * - 매 1분마다 (@Scheduled fixedDelay=60초) 실행
+ * - PreCheck_AnalyzeLogs_Schedule.conf 파일에서 분석 스케줄 로드
+ * - 배치/주기 스케줄별로 실행 시기 판별
+ * - 실행 대상 스케줄을 AnalyzeService에 위임
+ *
+ * <p>스케줄 파일 형식 (PreCheck_AnalyzeLogs_Schedule.conf):
+ * [serverId][sourceFilePath][스케줄타입][요일][시간][분]
+ * - 배치: [SRV001][/logs/system.log][배치][MON,TUE,...][09][00]
+ * - 주기: [SRV001][/logs/system.log][주기][월-일 범위][반복간격(분)]
+ *
+ * <p>스케줄 실행 판별:
+ * 1. 스케줄 파일에서 모든 스케줄 로드 (1분마다, 캐시 60초)
+ * 2. 각 스케줄마다:
+ *    - 오늘 요일이 스케줄 요일에 포함되는가? (배치용)
+ *    - 현재 시간이 스케줄 시간 범위 내인가? (1분 단위 poll window: +/- 30초)
+ *    - 배치: 오늘 첫 1회만 실행 (lastBatchRunDate로 중복 실행 방지)
+ *    - 주기: 주기 간격으로 반복 실행
+ *
+ * <p>실행 흐름:
+ * 1. 스케줄 파일 로드 (메모리 캐시, 60초 유효)
+ * 2. 각 스케줄 shouldRun 판별
+ * 3. shouldRun=true인 스케줄 AnalyzeService.analyze() 호출
+ * 4. 예외 발생 시 로그만 기록하고 다음 스케줄 처리
+ *
+ * <p>캐시 전략:
+ * - 스케줄 파일은 최대 60초마다 재로드 (자주 변경되지 않는 설정 파일)
+ * - 마지막 배치 실행 날짜는 메모리에 보관 (중복 실행 방지)\n */\n@Component
 public class AnalyzeScheduler {
 
     private static final Logger log = LogManager.getLogger(AnalyzeScheduler.class);

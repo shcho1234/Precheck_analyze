@@ -11,7 +11,24 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-@Component
+/**
+ * 문구형 로그 분석기
+ *
+ * <p>명세서 - 분석 방식:
+ * [문구] : LOG_ID에 매칭된 에러 키워드를 포함하면 에러, 포함하지 않으면 정상
+ *
+ * <p>분석 결과:
+ * - LEVEL_NORMAL: 에러 키워드가 로그에 포함되지 않음
+ * - LEVEL_ERROR: 에러 키워드 중 하나라도 로그에 포함됨 (첫 번째 일치 키워드 메시지에 포함)
+ *
+ * <p>예시:
+ * - 정책: serverId="SRV001", logId="ERROR_CHECK", keywords=["ORA-", "Exception"]
+ * - 로그: "2026/05/27 12:00:00.000 ORA-1234 에러발생"
+ * - 결과: LEVEL_ERROR ("ORA-" 키워드 발견)
+ *
+ * @see LogAnalyzer 분석기 인터페이스
+ * @see PhrasePolicy 문구형 정책 DTO
+ */\n@Component
 public class PhraseAnalyzer implements LogAnalyzer {
 
     private static final Logger log = LogManager.getLogger(PhraseAnalyzer.class);

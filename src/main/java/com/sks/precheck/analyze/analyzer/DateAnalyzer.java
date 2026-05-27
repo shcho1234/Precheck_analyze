@@ -16,11 +16,32 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-@Component
+/**
+ * 날짜형 로그 분석기
+ *
+ * <p>명세서 - 분석 방식:
+ * [날짜] : 로그내용 중 yyyy/MM/dd 형식의 날짜가 오늘과 같다면 정상, 아니면 에러
+ *
+ * <p>분석 결과:
+ * - LEVEL_NORMAL: 로그에서 파싱한 날짜가 오늘 날짜와 일치
+ * - LEVEL_ERROR: 로그에서 날짜를 파싱할 수 없거나 날짜가 오늘과 다름
+ *
+ * <p>예시:
+ * - 오늘: 2026-05-27
+ * - 로그: "2026/05/27 12:00:00 처리 완료" → LEVEL_NORMAL (2026/05/27 = 오늘)
+ * - 로그: "2026/05/26 12:00:00 처리 완료" → LEVEL_ERROR (2026/05/26 ≠ 오늘)
+ * - 로그: "처리 완료" → LEVEL_ERROR (날짜 파싱 불가)
+ *
+ * <p>구현: 로그 내용에서 정규식으로 yyyy/MM/dd 패턴 검색 후 파싱
+ *
+ * @see LogAnalyzer 분석기 인터페이스
+ * @see DatePolicy 날짜형 정책 DTO
+ */\n@Component
 public class DateAnalyzer implements LogAnalyzer {
 
     private static final Logger log = LogManager.getLogger(DateAnalyzer.class);
 
+    // 로그 내용에서 날짜를 파싱할 때 사용 (yyyy/MM/dd 형식)
     private static final DateTimeFormatter LOG_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd");
     private static final Pattern DATE_PATTERN = Pattern.compile("\\d{4}/\\d{2}/\\d{2}");
 

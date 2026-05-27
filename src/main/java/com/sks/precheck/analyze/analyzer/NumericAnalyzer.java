@@ -12,12 +12,38 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-@Component
+/**
+ * 수치형 로그 분석기
+ *
+ * <p>명세서 - 분석 방식:
+ * [수치] : LOG_ID에 매칭된 임계수치와 >, >=, <, <=, = 연산 비교
+ * - 참이면 정상
+ * - 거짓이면 에러
+ * - 임계수치 근접에 도달했을 경우 경고 (임계수치의 warningRatio% 이내)
+ *
+ * <p>분석 결과:
+ * - LEVEL_NORMAL: 로그값이 조건식을 만족하고 경고 범위 밖
+ * - LEVEL_WARNING: 로그값이 조건식 만족하지만 임계수치 근접 (경고 비율 내)
+ * - LEVEL_ERROR: 로그값이 조건식을 만족하지 않음 또는 로그값 NULL
+ *
+ * <p>예시:
+ * - 정책: operator="<", threshold=100, warningRatio=20
+ * - 로그값 50: LEVEL_NORMAL (50 < 100이고 경고 범위 밖)
+ * - 로그값 95: LEVEL_WARNING (95 < 100이지만 경고 범위 80~100 내)
+ * - 로그값 110: LEVEL_ERROR (110 < 100 거짓)
+ *
+ * <p>주의: 수치 계산은 반드시 BigDecimal 사용 (float/double 금지)
+ *
+ * @see LogAnalyzer 분석기 인터페이스
+ * @see NumericPolicy 수치형 정책 DTO
+ */\n@Component
 public class NumericAnalyzer implements LogAnalyzer {
 
     private static final Logger log = LogManager.getLogger(NumericAnalyzer.class);
 
+    // BigDecimal 상수: 백분율 계산용 (임계수치 근접 비율 계산)
     private static final BigDecimal ONE_HUNDRED = new BigDecimal("100");
+    // 계산 시 소수점 자리수 (나누기 결과 스케일)
     private static final int CALC_SCALE = 6;
 
     @Override
