@@ -28,3 +28,93 @@
 2026-05-28 16:28:19.658 [scheduling-1] INFO  AnalyzeScheduler - 주기 분석 실행 결정 - serverId: dlprem01-테스트개발, file: null, 간격: 1분, 984번째 실행, day: 1-5, start: 000501, end: 230501
 2026-05-28 16:28:19.663 [scheduling-1] INFO  AnalyzeService - 분석 이력 선등록 - historyId: 10, serverId: dlprem01-테스트개발, date: 20260528
 2026-05-28 16:28:19.667 [scheduling-1] INFO  AnalyzeRetryService - 분석 완료 - 서버: dlprem01-테스트개발, 타입: 주기, 대상일: 20260528, 총: 0건, 에러: 0건, 경고: 0건
+2026-05-28 17:01:59.452 [restartedMain] INFO  AnalyzeApplication - Starting AnalyzeApplication using Java 17.0.19 with PID 22516 (C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\build\classes\java\main started by 20200161 in C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze)
+2026-05-28 17:01:59.455 [restartedMain] INFO  AnalyzeApplication - The following 1 profile is active: "test"
+2026-05-28 17:02:00.000 [restartedMain] INFO  PolicyLoader - 분석 정책 로딩 완료 - count: 80, path: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\analyze_sample\PreCheck_AnalyzePolicy.conf
+2026-05-28 17:02:00.297 [restartedMain] INFO  AnalyzeApplication - Started AnalyzeApplication in 1.117 seconds (process running for 1.614)
+2026-05-28 17:02:00.314 [scheduling-1] INFO  AnalyzeScheduleParser - 분석 스케줄 파일 파싱 시작 - filePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\schedule_sample\PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\schedule_sample\PreCheck_AnalyzeLogs_Schedule.conf
+2026-05-28 17:02:00.317 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 197, schedule: 배치|1,3,5|090001
+2026-05-28 17:02:00.317 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 200, schedule: 배치|*|000000
+2026-05-28 17:02:00.317 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 203, schedule: 주기|1-5|180001|10|090001
+2026-05-28 17:02:00.317 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 206, schedule: 주기|1-5|090001|10
+2026-05-28 17:02:00.318 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 209, schedule: 배치|5-1|090001
+2026-05-28 17:02:00.318 [scheduling-1] WARN  AnalyzeScheduleParser - 분석 스케줄 라인 포맷 오류로 무시 - lineNumber: 212, line: dlprem01-테스트개발|배치|*|090001
+2026-05-28 17:02:00.318 [scheduling-1] INFO  AnalyzeScheduleParser - 분석 스케줄 파일 파싱 완료 - absolutePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\schedule_sample\PreCheck_AnalyzeLogs_Schedule.conf, 유효 스케줄 건수: 3
+2026-05-28 17:02:00.318 [scheduling-1] INFO  AnalyzeScheduleParser -   [1] serverId: dlprem01-테스트개발, sourceFilePath: null, type: 주기, day: 1-5, start: 000501, interval: 1, end: 230501
+2026-05-28 17:02:00.318 [scheduling-1] INFO  AnalyzeScheduleParser -   [2] serverId: axistuja-자동주문, sourceFilePath: null, type: 주기, day: 1-5, start: 080501, interval: 2, end: 190501
+2026-05-28 17:02:00.319 [scheduling-1] INFO  AnalyzeScheduleParser -   [3] serverId: axistuja-자동주문, sourceFilePath: /home/axistuja/log/monitoring.log, type: 주기, day: 1-5, start: 080501, interval: 30, end: 190501
+2026-05-28 17:02:00.321 [scheduling-1] INFO  AnalyzeScheduler - 주기 분석 실행 결정 - serverId: dlprem01-테스트개발, file: null, 간격: 1분, 1017번째 실행, day: 1-5, start: 000501, end: 230501
+2026-05-28 17:02:00.596 [scheduling-1] INFO  AnalyzeService - 분석 이력 등록 - historyId: 11, serverId: dlprem01-테스트개발, date: 20260528
+2026-05-28 17:02:00.625 [scheduling-1] INFO  AnalyzeRetryService - 분석 완료 - 서버: dlprem01-테스트개발, 타입: 주기, 대상일: 20260528, 총: 0건, 에러: 0건, 경고: 0건
+2026-05-28 17:02:00.625 [scheduling-1] INFO  AnalyzeScheduler - 주기 분석 실행 결정 - serverId: axistuja-자동주문, file: null, 간격: 2분, 269번째 실행, day: 1-5, start: 080501, end: 190501
+2026-05-28 17:02:00.626 [scheduling-1] INFO  AnalyzeService - 분석 이력 등록 - historyId: 12, serverId: axistuja-자동주문, date: 20260528
+2026-05-28 17:02:00.627 [scheduling-1] INFO  AnalyzeRetryService - 분석 완료 - 서버: axistuja-자동주문, 타입: 주기, 대상일: 20260528, 총: 0건, 에러: 0건, 경고: 0건
+2026-05-28 17:04:06.501 [restartedMain] INFO  AnalyzeApplication - Starting AnalyzeApplication using Java 17.0.19 with PID 17184 (C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\build\classes\java\main started by 20200161 in C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze)
+2026-05-28 17:04:06.505 [restartedMain] INFO  AnalyzeApplication - The following 1 profile is active: "test"
+2026-05-28 17:04:07.239 [restartedMain] INFO  PolicyLoader - 분석 정책 로딩 완료 - count: 80, path: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\analyze_sample\PreCheck_AnalyzePolicy.conf
+2026-05-28 17:04:07.578 [restartedMain] INFO  AnalyzeApplication - Started AnalyzeApplication in 1.533 seconds (process running for 2.023)
+2026-05-28 17:04:07.586 [scheduling-1] INFO  AnalyzeScheduleParser - 분석 스케줄 파일 파싱 시작 - filePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\schedule_sample\PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\schedule_sample\PreCheck_AnalyzeLogs_Schedule.conf
+2026-05-28 17:04:07.589 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 197, schedule: 배치|1,3,5|090001
+2026-05-28 17:04:07.589 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 200, schedule: 배치|*|000000
+2026-05-28 17:04:07.589 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 203, schedule: 주기|1-5|180001|10|090001
+2026-05-28 17:04:07.589 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 206, schedule: 주기|1-5|090001|10
+2026-05-28 17:04:07.590 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 209, schedule: 배치|5-1|090001
+2026-05-28 17:04:07.590 [scheduling-1] WARN  AnalyzeScheduleParser - 분석 스케줄 라인 포맷 오류로 무시 - lineNumber: 212, line: dlprem01-테스트개발|배치|*|090001
+2026-05-28 17:04:07.590 [scheduling-1] INFO  AnalyzeScheduleParser - 분석 스케줄 파일 파싱 완료 - absolutePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\schedule_sample\PreCheck_AnalyzeLogs_Schedule.conf, 유효 스케줄 건수: 3
+2026-05-28 17:04:07.591 [scheduling-1] INFO  AnalyzeScheduleParser -   [1] serverId: dlprem01-테스트개발, sourceFilePath: null, type: 주기, day: 1-5, start: 000501, interval: 1, end: 230501
+2026-05-28 17:04:07.591 [scheduling-1] INFO  AnalyzeScheduleParser -   [2] serverId: axistuja-자동주문, sourceFilePath: null, type: 주기, day: 1-5, start: 080501, interval: 2, end: 190501
+2026-05-28 17:04:07.591 [scheduling-1] INFO  AnalyzeScheduleParser -   [3] serverId: axistuja-자동주문, sourceFilePath: /home/axistuja/log/monitoring.log, type: 주기, day: 1-5, start: 080501, interval: 30, end: 190501
+2026-05-28 17:04:07.596 [scheduling-1] INFO  AnalyzeScheduler - 주기 분석 실행 결정 - serverId: dlprem01-테스트개발, file: null, 간격: 1분, 1020번째 실행, day: 1-5, start: 000501, end: 230501
+2026-05-28 17:04:07.885 [scheduling-1] INFO  AnalyzeService - 분석 이력 등록 - historyId: 13, serverId: dlprem01-테스트개발, date: 20260528
+2026-05-28 17:04:07.996 [scheduling-1] INFO  AnalyzeRetryService - 분석 완료 - 서버: dlprem01-테스트개발, 타입: 주기, 대상일: 20260528, 총: 56건, 에러: 9건, 경고: 2건
+2026-05-28 17:05:07.998 [scheduling-1] INFO  AnalyzeScheduleParser - 분석 스케줄 파일 파싱 시작 - filePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\schedule_sample\PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\schedule_sample\PreCheck_AnalyzeLogs_Schedule.conf
+2026-05-28 17:05:08.001 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 197, schedule: 배치|1,3,5|090001
+2026-05-28 17:05:08.003 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 200, schedule: 배치|*|000000
+2026-05-28 17:05:08.004 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 203, schedule: 주기|1-5|180001|10|090001
+2026-05-28 17:05:08.004 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 206, schedule: 주기|1-5|090001|10
+2026-05-28 17:05:08.005 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 209, schedule: 배치|5-1|090001
+2026-05-28 17:05:08.006 [scheduling-1] WARN  AnalyzeScheduleParser - 분석 스케줄 라인 포맷 오류로 무시 - lineNumber: 212, line: dlprem01-테스트개발|배치|*|090001
+2026-05-28 17:05:08.006 [scheduling-1] INFO  AnalyzeScheduleParser - 분석 스케줄 파일 파싱 완료 - absolutePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\schedule_sample\PreCheck_AnalyzeLogs_Schedule.conf, 유효 스케줄 건수: 3
+2026-05-28 17:05:08.007 [scheduling-1] INFO  AnalyzeScheduleParser -   [1] serverId: dlprem01-테스트개발, sourceFilePath: null, type: 주기, day: 1-5, start: 000501, interval: 1, end: 230501
+2026-05-28 17:05:08.008 [scheduling-1] INFO  AnalyzeScheduleParser -   [2] serverId: axistuja-자동주문, sourceFilePath: null, type: 주기, day: 1-5, start: 080501, interval: 2, end: 190501
+2026-05-28 17:05:08.008 [scheduling-1] INFO  AnalyzeScheduleParser -   [3] serverId: axistuja-자동주문, sourceFilePath: /home/axistuja/log/monitoring.log, type: 주기, day: 1-5, start: 080501, interval: 30, end: 190501
+2026-05-28 17:05:08.009 [scheduling-1] INFO  AnalyzeScheduler - 주기 분석 실행 결정 - serverId: dlprem01-테스트개발, file: null, 간격: 1분, 1021번째 실행, day: 1-5, start: 000501, end: 230501
+2026-05-28 17:05:08.014 [scheduling-1] INFO  AnalyzeService - 분석 이력 등록 - historyId: 14, serverId: dlprem01-테스트개발, date: 20260528
+2026-05-28 17:05:08.018 [scheduling-1] INFO  AnalyzeRetryService - 분석 완료 - 서버: dlprem01-테스트개발, 타입: 주기, 대상일: 20260528, 총: 0건, 에러: 0건, 경고: 0건
+2026-05-28 17:05:08.019 [scheduling-1] INFO  AnalyzeScheduler - 주기 분석 실행 결정 - serverId: axistuja-자동주문, file: null, 간격: 2분, 271번째 실행, day: 1-5, start: 080501, end: 190501
+2026-05-28 17:05:08.020 [scheduling-1] INFO  AnalyzeService - 분석 이력 등록 - historyId: 15, serverId: axistuja-자동주문, date: 20260528
+2026-05-28 17:05:08.022 [scheduling-1] INFO  AnalyzeRetryService - 분석 완료 - 서버: axistuja-자동주문, 타입: 주기, 대상일: 20260528, 총: 0건, 에러: 0건, 경고: 0건
+2026-05-28 17:05:08.022 [scheduling-1] INFO  AnalyzeScheduler - 주기 분석 실행 결정 - serverId: axistuja-자동주문, file: /home/axistuja/log/monitoring.log, 간격: 30분, 19번째 실행, day: 1-5, start: 080501, end: 190501
+2026-05-28 17:05:08.024 [scheduling-1] INFO  AnalyzeService - 분석 이력 등록 - historyId: 16, serverId: axistuja-자동주문, date: 20260528
+2026-05-28 17:05:08.026 [scheduling-1] INFO  AnalyzeRetryService - 분석 완료 - 서버: axistuja-자동주문, 타입: 주기, 대상일: 20260528, 총: 0건, 에러: 0건, 경고: 0건
+2026-05-28 17:06:08.028 [scheduling-1] INFO  AnalyzeScheduleParser - 분석 스케줄 파일 파싱 시작 - filePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\schedule_sample\PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\schedule_sample\PreCheck_AnalyzeLogs_Schedule.conf
+2026-05-28 17:06:08.031 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 197, schedule: 배치|1,3,5|090001
+2026-05-28 17:06:08.032 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 200, schedule: 배치|*|000000
+2026-05-28 17:06:08.033 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 203, schedule: 주기|1-5|180001|10|090001
+2026-05-28 17:06:08.034 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 206, schedule: 주기|1-5|090001|10
+2026-05-28 17:06:08.035 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 209, schedule: 배치|5-1|090001
+2026-05-28 17:06:08.035 [scheduling-1] WARN  AnalyzeScheduleParser - 분석 스케줄 라인 포맷 오류로 무시 - lineNumber: 212, line: dlprem01-테스트개발|배치|*|090001
+2026-05-28 17:06:08.036 [scheduling-1] INFO  AnalyzeScheduleParser - 분석 스케줄 파일 파싱 완료 - absolutePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\schedule_sample\PreCheck_AnalyzeLogs_Schedule.conf, 유효 스케줄 건수: 3
+2026-05-28 17:06:08.037 [scheduling-1] INFO  AnalyzeScheduleParser -   [1] serverId: dlprem01-테스트개발, sourceFilePath: null, type: 주기, day: 1-5, start: 000501, interval: 1, end: 230501
+2026-05-28 17:06:08.037 [scheduling-1] INFO  AnalyzeScheduleParser -   [2] serverId: axistuja-자동주문, sourceFilePath: null, type: 주기, day: 1-5, start: 080501, interval: 2, end: 190501
+2026-05-28 17:06:08.038 [scheduling-1] INFO  AnalyzeScheduleParser -   [3] serverId: axistuja-자동주문, sourceFilePath: /home/axistuja/log/monitoring.log, type: 주기, day: 1-5, start: 080501, interval: 30, end: 190501
+2026-05-28 17:06:08.038 [scheduling-1] INFO  AnalyzeScheduler - 주기 분석 실행 결정 - serverId: dlprem01-테스트개발, file: null, 간격: 1분, 1022번째 실행, day: 1-5, start: 000501, end: 230501
+2026-05-28 17:06:08.043 [scheduling-1] INFO  AnalyzeService - 분석 이력 등록 - historyId: 17, serverId: dlprem01-테스트개발, date: 20260528
+2026-05-28 17:06:08.045 [scheduling-1] INFO  AnalyzeRetryService - 분석 완료 - 서버: dlprem01-테스트개발, 타입: 주기, 대상일: 20260528, 총: 0건, 에러: 0건, 경고: 0건
+2026-05-28 17:07:08.047 [scheduling-1] INFO  AnalyzeScheduleParser - 분석 스케줄 파일 파싱 시작 - filePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\schedule_sample\PreCheck_AnalyzeLogs_Schedule.conf, absolutePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\schedule_sample\PreCheck_AnalyzeLogs_Schedule.conf
+2026-05-28 17:07:08.050 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 197, schedule: 배치|1,3,5|090001
+2026-05-28 17:07:08.051 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 200, schedule: 배치|*|000000
+2026-05-28 17:07:08.052 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 203, schedule: 주기|1-5|180001|10|090001
+2026-05-28 17:07:08.052 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 206, schedule: 주기|1-5|090001|10
+2026-05-28 17:07:08.053 [scheduling-1] WARN  AnalyzeScheduleParser - 분석주기기술 포맷 오류로 무시 - lineNumber: 209, schedule: 배치|5-1|090001
+2026-05-28 17:07:08.054 [scheduling-1] WARN  AnalyzeScheduleParser - 분석 스케줄 라인 포맷 오류로 무시 - lineNumber: 212, line: dlprem01-테스트개발|배치|*|090001
+2026-05-28 17:07:08.055 [scheduling-1] INFO  AnalyzeScheduleParser - 분석 스케줄 파일 파싱 완료 - absolutePath: C:\Users\20200161\Desktop\PreCheck_work\Precheck_project\Precheck_SKSCh1\precheck_collect\analyze\schedule_sample\PreCheck_AnalyzeLogs_Schedule.conf, 유효 스케줄 건수: 3
+2026-05-28 17:07:08.056 [scheduling-1] INFO  AnalyzeScheduleParser -   [1] serverId: dlprem01-테스트개발, sourceFilePath: null, type: 주기, day: 1-5, start: 000501, interval: 1, end: 230501
+2026-05-28 17:07:08.056 [scheduling-1] INFO  AnalyzeScheduleParser -   [2] serverId: axistuja-자동주문, sourceFilePath: null, type: 주기, day: 1-5, start: 080501, interval: 2, end: 190501
+2026-05-28 17:07:08.057 [scheduling-1] INFO  AnalyzeScheduleParser -   [3] serverId: axistuja-자동주문, sourceFilePath: /home/axistuja/log/monitoring.log, type: 주기, day: 1-5, start: 080501, interval: 30, end: 190501
+2026-05-28 17:07:08.057 [scheduling-1] INFO  AnalyzeScheduler - 주기 분석 실행 결정 - serverId: dlprem01-테스트개발, file: null, 간격: 1분, 1023번째 실행, day: 1-5, start: 000501, end: 230501
+2026-05-28 17:07:08.062 [scheduling-1] INFO  AnalyzeService - 분석 이력 등록 - historyId: 18, serverId: dlprem01-테스트개발, date: 20260528
+2026-05-28 17:07:08.065 [scheduling-1] INFO  AnalyzeRetryService - 분석 완료 - 서버: dlprem01-테스트개발, 타입: 주기, 대상일: 20260528, 총: 0건, 에러: 0건, 경고: 0건
+2026-05-28 17:07:08.065 [scheduling-1] INFO  AnalyzeScheduler - 주기 분석 실행 결정 - serverId: axistuja-자동주문, file: null, 간격: 2분, 272번째 실행, day: 1-5, start: 080501, end: 190501
+2026-05-28 17:07:08.066 [scheduling-1] INFO  AnalyzeService - 분석 이력 등록 - historyId: 19, serverId: axistuja-자동주문, date: 20260528
+2026-05-28 17:07:08.069 [scheduling-1] INFO  AnalyzeRetryService - 분석 완료 - 서버: axistuja-자동주문, 타입: 주기, 대상일: 20260528, 총: 0건, 에러: 0건, 경고: 0건

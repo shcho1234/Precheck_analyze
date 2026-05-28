@@ -69,7 +69,7 @@
         WHERE ANALYZE_HISTORY_ID = #{analyzeHistoryId}
     </update>
 
-    <!-- 주기 분석 시 마지막 성공 이력 조회 -->
+    <!-- 주기 분석 시 당일 마지막 성공 이력 조회 — 날짜 조건으로 전날 이력이 섞이지 않도록 함 -->
     <select id="selectLastSuccess" resultType="com.sks.precheck.analyze.domain.AnalyzeHistory">
         SELECT
             ANALYZE_HISTORY_ID,
@@ -93,6 +93,7 @@
         <where>
             ANALYZE_STATUS = 'SUCCESS'
             AND SERVER_ID = #{serverId}
+            AND ANALYZE_DATE = #{analyzeDate}
             <choose>
                 <when test="sourceFilePath != null and sourceFilePath != ''">
                     AND SOURCE_FILE_PATH = #{sourceFilePath}

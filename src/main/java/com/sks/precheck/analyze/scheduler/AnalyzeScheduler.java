@@ -147,6 +147,11 @@ public class AnalyzeScheduler {
         }
 
         int endSeconds = parseTime(endTimeText).toSecondOfDay();
+        if (startSeconds >= endSeconds) {
+            log.warn("주기 스케줄 시간 범위 오류(startTime >= endTime) - serverId: {}, start: {}, end: {}",
+                    schedule.getServerId(), schedule.getStartTime(), schedule.getEndTime());
+            return false;
+        }
         if (nowSeconds < startSeconds || nowSeconds > endSeconds) {
             return false;
         }

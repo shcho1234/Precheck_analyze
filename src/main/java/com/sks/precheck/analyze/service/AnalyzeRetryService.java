@@ -113,7 +113,8 @@ public class AnalyzeRetryService {
         // 이력이 없거나 배치 스케줄이면 오늘 전체 조회(selectForAnalyze)로 fallback
         Long lastAnalyzeLogId = null;
         if ("주기".equals(scheduleType)) {
-            AnalyzeHistory lastSuccess = analyzeHistoryMapper.selectLastSuccess(serverId, sourceFilePath);
+            // analyzeTargetDate(당일)로 범위를 한정 — 전날 이력의 lastAnalyzeLogId가 섞이면 오늘 로그를 건너뜀
+            AnalyzeHistory lastSuccess = analyzeHistoryMapper.selectLastSuccess(serverId, sourceFilePath, analyzeTargetDate);
             if (lastSuccess != null) {
                 lastAnalyzeLogId = lastSuccess.getLastAnalyzeLogId();
             }

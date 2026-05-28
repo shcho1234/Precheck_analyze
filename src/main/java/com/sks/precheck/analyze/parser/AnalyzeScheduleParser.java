@@ -160,6 +160,11 @@ public class AnalyzeScheduleParser {
                 return null;
             }
 
+            // startTime >= endTime이면 유효하지 않은 시간 범위 (예: 180001|10|090001)
+            if (Integer.parseInt(startTime) >= Integer.parseInt(endTime)) {
+                return null;
+            }
+
             return new ScheduleParts(type, daySpec, startTime, Integer.parseInt(intervalMinutesText), endTime);
         }
 
