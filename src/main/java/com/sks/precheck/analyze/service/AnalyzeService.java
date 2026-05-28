@@ -57,7 +57,7 @@ public class AnalyzeService {
         history.setCreatedAt(now);
         history.setUpdatedAt(now);
         analyzeHistoryMapper.insert(history);
-        log.info("분석 이력 선등록 - historyId: {}, serverId: {}, date: {}", historyId, scheduleVo.getServerId(), analyzeTargetDate);
+        log.info("분석 이력 등록 - historyId: {}, serverId: {}, date: {}", historyId, scheduleVo.getServerId(), analyzeTargetDate);
 
         return analyzeRetryService.analyzeWithRetry(historyId, scheduleVo, scheduleType, analyzeTargetDate, analyzeDate);
     }
