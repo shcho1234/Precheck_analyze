@@ -41,6 +41,18 @@ class NumericAnalyzerTest {
         assertEquals(AnalyzeConstants.LEVEL_ERROR, analyzeLevel(policy, "99"));
     }
 
+    @Test
+    void threshold0_zeroValueIsNormal_notWarning() {
+        // threshold=0, warningRatio=1% → warningDelta=0 → 경고 구간 없음 → 0은 정상
+        NumericPolicy lePolicy = numericPolicy("<=", "0", "1");
+        assertEquals(AnalyzeConstants.LEVEL_NORMAL, analyzeLevel(lePolicy, "0"));
+        assertEquals(AnalyzeConstants.LEVEL_ERROR, analyzeLevel(lePolicy, "1"));
+
+        NumericPolicy gePolicy = numericPolicy(">=", "0", "1");
+        assertEquals(AnalyzeConstants.LEVEL_NORMAL, analyzeLevel(gePolicy, "0"));
+        assertEquals(AnalyzeConstants.LEVEL_ERROR, analyzeLevel(gePolicy, "-1"));
+    }
+
     private String analyzeLevel(NumericPolicy policy, String logValueText) {
         CollectLog log = baseCollectLog();
         log.setLogType(AnalyzeConstants.LOG_TYPE_NUMERIC);

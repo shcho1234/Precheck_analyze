@@ -129,7 +129,7 @@ public class AnalyzeScheduler {
         }
 
         lastBatchRunDateByKey.put(key, today);
-        log.info("배치 분석 실행 결정 - serverId: {}, file: {}, day: {}, start: {}",
+        log.info("[[[배치 분석 실행 결정]]] - serverId: {}, file: {}, day: {}, start: {}",
                 schedule.getServerId(), schedule.getSourceFilePath(), schedule.getDayOfWeek(), schedule.getStartTime());
         return true;
     }
@@ -175,7 +175,7 @@ public class AnalyzeScheduler {
         }
 
         lastPeriodicRunIndexByKey.put(key, runIndex);
-        log.info("주기 분석 실행 결정 - serverId: {}, file: {}, 간격: {}분, {}번째 실행, day: {}, start: {}, end: {}",
+        log.info("[[[주기 분석 실행 결정]]] - serverId: {}, file: {}, 간격: {}분, {}번째 실행, day: {}, start: {}, end: {}",
                 schedule.getServerId(),
                 schedule.getSourceFilePath(),
                 intervalMinutes,

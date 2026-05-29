@@ -25,6 +25,8 @@ public class AnalyzeScheduleParser {
 
     public List<AnalyzeScheduleVo> parseScheduleFile(String filePath) {
         Path path = Path.of(filePath);
+        log.info("==============================================================");
+        log.info("==============================================================");
         log.info("분석 스케줄 파일 파싱 시작 - filePath: {}, absolutePath: {}", filePath, path.toAbsolutePath());
 
         Map<String, AnalyzeScheduleVo> scheduleByKey = new LinkedHashMap<>();

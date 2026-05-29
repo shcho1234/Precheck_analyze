@@ -104,8 +104,10 @@ public class NumericAnalyzer implements LogAnalyzer {
 
             // 경고 구간: [threshold - delta, threshold) — 값이 임계치 하단에서 경고
             // 예) threshold=100, warningRatio=20 → logValue가 80 이상이면 경고
+            // warningDelta=0(threshold=0 등)이면 경고 구간이 없으므로 정상 처리
             BigDecimal warningStart = threshold.subtract(warningDelta);
-            boolean isWarning = logValue.compareTo(warningStart) >= 0;
+            boolean isWarning = warningDelta.compareTo(BigDecimal.ZERO) > 0
+                    && logValue.compareTo(warningStart) >= 0;
             return isWarning ? AnalyzeConstants.LEVEL_WARNING : AnalyzeConstants.LEVEL_NORMAL;
         }
 
@@ -122,8 +124,10 @@ public class NumericAnalyzer implements LogAnalyzer {
 
             // 경고 구간: (threshold, threshold + delta] — 값이 임계치 상단에서 경고
             // 예) threshold=10, warningRatio=20 → logValue가 12 이하이면 경고
+            // warningDelta=0(threshold=0 등)이면 경고 구간이 없으므로 정상 처리
             BigDecimal warningEnd = threshold.add(warningDelta);
-            boolean isWarning = logValue.compareTo(warningEnd) <= 0;
+            boolean isWarning = warningDelta.compareTo(BigDecimal.ZERO) > 0
+                    && logValue.compareTo(warningEnd) <= 0;
             return isWarning ? AnalyzeConstants.LEVEL_WARNING : AnalyzeConstants.LEVEL_NORMAL;
         }
 
