@@ -24,7 +24,7 @@ src/main/java/com/sks/precheck/analyze/
 │
 ├── service/
 │   ├── AnalyzeService.java          # 분석 진입점: 이력 선등록 후 RetryService 위임
-│   └── AnalyzeRetryService.java     # 실제 분석 수행 (@Retryable 5분 간격 3회 재시도)
+│   └── AnalyzeRetryService.java     # 실제 분석 수행 (@Retryable 10초 간격 3회 재시도)
 │
 ├── analyzer/                        # [Strategy Pattern] 로그 타입별 분석 구현체
 │   ├── LogAnalyzer.java             #   └─ 인터페이스
@@ -103,7 +103,7 @@ src/main/java/com/sks/precheck/analyze/
      │
      └─ AnalyzeRetryService.analyzeWithRetry(...)
 
-[4] AnalyzeRetryService.analyzeWithRetry()  ← @Retryable(AnalyzeException, 4회, 300s)
+[4] AnalyzeRetryService.analyzeWithRetry()  ← @Retryable(AnalyzeException, 4회, 10s)
      │
      └─ analyzeInternal(...)
           │
@@ -237,13 +237,13 @@ precheck:
 analyzeWithRetry() 호출
   │
   ├─ 1차 시도
-  │   AnalyzeException 발생 → 300초(5분) 대기
+  │   AnalyzeException 발생 → 10초 대기
   │
   ├─ 2차 재시도
-  │   AnalyzeException 발생 → 300초 대기
+  │   AnalyzeException 발생 → 10초 대기
   │
   ├─ 3차 재시도
-  │   AnalyzeException 발생 → 300초 대기
+  │   AnalyzeException 발생 → 10초 대기
   │
   ├─ 4차 재시도 (maxAttempts=4)
   │   AnalyzeException 발생

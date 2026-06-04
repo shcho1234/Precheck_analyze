@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 /**
  * 실제 분석 수행 서비스
  *
- * AnalyzeException 발생 시 @Retryable이 5분(300s) 간격으로 최대 3회 재시도한다.
+ * AnalyzeException 발생 시 @Retryable이 10초 간격으로 최대 3회 재시도한다.
  * maxAttempts=4 = 최초 1회 + 재시도 3회. 모두 실패하면 @Recover가 이력을 FAIL로 마감한다.
  *
  * 분석 대상 로그 조회 방식:
@@ -77,11 +77,11 @@ public class AnalyzeRetryService {
         this.infoAnalyzer = infoAnalyzer;
     }
 
-    // maxAttempts=4: 최초 1회 + 재시도 3회(300s 간격) = 명세서 "5분 간격 3회 재시도"
+    // maxAttempts=4: 최초 1회 + 재시도 3회(10s 간격)
     @Retryable(
             retryFor = {AnalyzeException.class},
             maxAttempts = 4,
-            backoff = @Backoff(delay = 300_000L)
+            backoff = @Backoff(delay = 10_000L)
     )
     public int analyzeWithRetry(
             Long historyId,
@@ -93,8 +93,14 @@ public class AnalyzeRetryService {
         try {
             return analyzeInternal(historyId, scheduleVo, scheduleType, analyzeTargetDate, analyzeDate);
         } catch (AnalyzeException e) {
+            log.error("분석 처리 실패(재시도 예정) - 서버: {}, 타입: {}, 대상일: {}",
+                    scheduleVo != null ? scheduleVo.getServerId() : null,
+                    scheduleType, analyzeTargetDate, e);
             throw e;
         } catch (Exception e) {
+            log.error("분석 처리 중 예외(재시도 예정) - 서버: {}, 타입: {}, 대상일: {}",
+                    scheduleVo != null ? scheduleVo.getServerId() : null,
+                    scheduleType, analyzeTargetDate, e);
             throw new AnalyzeException("분석 처리 실패", e);
         }
     }

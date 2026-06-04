@@ -47,23 +47,17 @@
 -- NOCYCLE           : 최대값 도달 시 오류 발생 (재사용 방지)
 CREATE SEQUENCE SEQ_COLLECT_LOG
     START WITH 1
-    INCREMENT BY 1
-    NOCACHE
-    NOCYCLE;
+    INCREMENT BY 1;
 
 -- 수집 실행 이력 테이블용 시퀀스
 CREATE SEQUENCE SEQ_COLLECT_HISTORY
     START WITH 1
-    INCREMENT BY 1
-    NOCACHE
-    NOCYCLE;
+    INCREMENT BY 1;
 
 -- 수집 제외 대상 테이블용 시퀀스
 CREATE SEQUENCE SEQ_COLLECT_EXCLUDE
     START WITH 1
-    INCREMENT BY 1
-    NOCACHE
-    NOCYCLE;
+    INCREMENT BY 1;
 ```
 
 ---
@@ -324,7 +318,7 @@ CREATE TABLE TB_COLLECT_HISTORY (
     RETRY_COUNT         NUMERIC(2, 0)       DEFAULT 0,
     -- 수집 재시도 횟수 (최초 시도 불포함)
     -- 0: 최초 시도 성공, 1~3: 재시도 후 성공 또는 실패
-    -- 명세서 기준: 최초 실패 후 5분 간격 재시도 최대 3회
+    -- 명세서 기준: 최초 실패 후 10초 간격 재시도 최대 3회
 
     FAIL_REASON         VARCHAR(1000),
     -- 수집 실패 사유 (FAIL 상태일 때 기록)
