@@ -10,6 +10,7 @@ import com.sks.precheck.analyze.vo.AnalyzeScheduleVo;
 import java.time.LocalDateTime;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /**
@@ -34,7 +35,8 @@ public class AnalyzeService {
         this.analyzeRetryService = analyzeRetryService;
     }
 
-    public int analyze(AnalyzeScheduleVo scheduleVo) {
+    @Async("analyzeTaskExecutor")
+    public void analyze(AnalyzeScheduleVo scheduleVo) {
         String scheduleType = parseScheduleType(scheduleVo.getScheduleType());
 
         Long historyId = sequenceHelper.nextval("SEQ_ANALYZE_HISTORY");
@@ -59,7 +61,7 @@ public class AnalyzeService {
         analyzeHistoryMapper.insert(history);
         log.info("분석 이력 등록 - historyId: {}, serverId: {}, date: {}", historyId, scheduleVo.getServerId(), analyzeTargetDate);
 
-        return analyzeRetryService.analyzeWithRetry(historyId, scheduleVo, scheduleType, analyzeTargetDate, analyzeDate);
+        analyzeRetryService.analyzeWithRetry(historyId, scheduleVo, scheduleType, analyzeTargetDate, analyzeDate);
     }
 
     private String parseScheduleType(String scheduleType) {

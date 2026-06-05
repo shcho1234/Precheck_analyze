@@ -23,7 +23,7 @@ src/main/java/com/sks/precheck/analyze/
 │   └── AnalyzeScheduler.java        # 60초마다 실행, 스케줄 파일 해석 → 분석 트리거
 │
 ├── service/
-│   ├── AnalyzeService.java          # 분석 진입점: 이력 선등록 후 RetryService 위임
+│   ├── AnalyzeService.java          # 분석 진입점: @Async 비동기 실행, 이력 선등록 후 RetryService 위임
 │   └── AnalyzeRetryService.java     # 실제 분석 수행 (@Retryable 10초 간격 3회 재시도)
 │
 ├── analyzer/                        # [Strategy Pattern] 로그 타입별 분석 구현체
@@ -94,8 +94,8 @@ src/main/java/com/sks/precheck/analyze/
           ├─ 배치: 지정 요일 + 지정 시각 + 오늘 첫 1회
           └─ 주기: startTime~endTime 사이 intervalMinutes 간격마다
 
-[3] AnalyzeService.analyze(scheduleVo)
-     │
+[3] AnalyzeService.analyze(scheduleVo)   ← @Async("analyzeTaskExecutor") — 스케줄러 스레드 즉시 반환
+     │                                      각 스케줄은 analyzeTaskExecutor 풀의 독립 스레드에서 실행
      ├─ SEQ_ANALYZE_HISTORY.nextval
      │
      ├─ TB_ANALYZE_HISTORY INSERT    상태=FAIL, failReason="IN_PROGRESS"

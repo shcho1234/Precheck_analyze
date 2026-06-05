@@ -140,7 +140,16 @@ public class AnalyzeRetryService {
         long successCount = 0;
 
         for (CollectLog collectLog : logs) {
-            AnalyzeResult result = analyzeOne(collectLog);
+            AnalyzeResult result;
+            try {
+                result = analyzeOne(collectLog);
+            } catch (Exception e) {
+                log.error("[예외] 분석 실패 - serverId: {}, serverIp: {}, collectLogId: {}, logId: {}, logType: {}, logContent: {}",
+                        serverId, collectLog.getServerIp(),
+                        collectLog.getCollectLogId(), collectLog.getLogId(),
+                        collectLog.getLogType(), collectLog.getLogContent(), e);
+                throw e;
+            }
 
             LocalDateTime now = LocalDateTime.now();
             result.setAnalyzeResultId(sequenceHelper.nextval("SEQ_ANALYZE_RESULT"));
@@ -150,12 +159,34 @@ public class AnalyzeRetryService {
             result.setNotifyYn("N");
             result.setCreatedAt(now);
 
-            analyzeResultMapper.insert(result);
+            try {
+                analyzeResultMapper.insert(result);
+            } catch (Exception e) {
+                log.error("[예외] 결과 저장 실패 - serverId: {}, serverIp: {}, collectLogId: {}, logId: {}, logType: {}",
+                        serverId, collectLog.getServerIp(),
+                        collectLog.getCollectLogId(), collectLog.getLogId(),
+                        collectLog.getLogType(), e);
+                throw e;
+            }
 
-            if (AnalyzeConstants.LEVEL_ERROR.equals(result.getAnalyzeLevel())) {
+            String level = result.getAnalyzeLevel();
+            if (AnalyzeConstants.LEVEL_ERROR.equals(level)) {
                 errorCount++;
-            } else if (AnalyzeConstants.LEVEL_WARNING.equals(result.getAnalyzeLevel())) {
+                log.warn("[에러] serverId: {}, serverIp: {}, collectLogId: {}, logId: {}, logType: {}, 판정: {}",
+                        serverId, collectLog.getServerIp(),
+                        collectLog.getCollectLogId(), collectLog.getLogId(),
+                        collectLog.getLogType(), result.getAnalyzeMessage());
+            } else if (AnalyzeConstants.LEVEL_WARNING.equals(level)) {
                 warningCount++;
+                log.warn("[경고] serverId: {}, serverIp: {}, collectLogId: {}, logId: {}, logType: {}, 판정: {}",
+                        serverId, collectLog.getServerIp(),
+                        collectLog.getCollectLogId(), collectLog.getLogId(),
+                        collectLog.getLogType(), result.getAnalyzeMessage());
+            } else {
+                log.info("[{}] serverId: {}, serverIp: {}, collectLogId: {}, logId: {}, logType: {}, 판정: {}",
+                        level, serverId, collectLog.getServerIp(),
+                        collectLog.getCollectLogId(), collectLog.getLogId(),
+                        collectLog.getLogType(), result.getAnalyzeMessage());
             }
 
             lastProcessedLogId = collectLog.getCollectLogId();
