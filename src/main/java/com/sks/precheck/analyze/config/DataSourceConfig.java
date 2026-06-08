@@ -24,8 +24,8 @@ public class DataSourceConfig {
     @Bean
     @Primary
     @Profile("test")
-    public DataSource testDataSource(DataSourceProperties testDataSourceProperties) {
-        return testDataSourceProperties.initializeDataSourceBuilder().build();
+    public DataSource testDataSource() {
+        return testDataSourceProperties().initializeDataSourceBuilder().build();
     }
 
     @Bean
@@ -38,7 +38,7 @@ public class DataSourceConfig {
     @Bean
     @Primary
     @Profile("prod")
-    public DataSource dataSource(DataSourceProperties prodDataSourceProperties) {
-        return prodDataSourceProperties.initializeDataSourceBuilder().build();
+    public DataSource dataSource() {
+        return prodDataSourceProperties().initializeDataSourceBuilder().build();
     }
 }
