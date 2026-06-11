@@ -4,11 +4,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.sks.precheck.analyze.common.constants.AnalyzeConstants;
 import com.sks.precheck.analyze.domain.policy.AnalyzePolicy;
+import com.sks.precheck.analyze.domain.policy.ComparePolicy;
 import com.sks.precheck.analyze.domain.policy.DatePolicy;
 import com.sks.precheck.analyze.domain.policy.ExistencePolicy;
 import com.sks.precheck.analyze.domain.policy.InfoPolicy;
 import com.sks.precheck.analyze.domain.policy.NumericPolicy;
 import com.sks.precheck.analyze.domain.policy.PhrasePolicy;
+import com.sks.precheck.analyze.domain.policy.TimePolicy;
 import com.sks.precheck.analyze.parser.AnalyzePolicyParser;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
@@ -85,12 +87,40 @@ class AnalyzePolicyParserTest {
     }
 
     @Test
+    void parse_compare_ok() {
+        AnalyzePolicy policy = parser.parse("[dlprem01-테스트개발][JUCHE_DIFF_01][비교]");
+        assertNotNull(policy);
+        assertInstanceOf(ComparePolicy.class, policy);
+
+        ComparePolicy comparePolicy = (ComparePolicy) policy;
+        assertEquals("dlprem01-테스트개발", comparePolicy.getServerId());
+        assertEquals("JUCHE_DIFF_01", comparePolicy.getLogId());
+        assertEquals(AnalyzeConstants.LOG_TYPE_COMPARE, comparePolicy.getLogType());
+    }
+
+    @Test
+    void parse_time_ok() {
+        AnalyzePolicy policy = parser.parse("[dlprem01-테스트개발][DATE_BTIME][시간][<][08:00]");
+        assertNotNull(policy);
+        assertInstanceOf(TimePolicy.class, policy);
+
+        TimePolicy timePolicy = (TimePolicy) policy;
+        assertEquals("dlprem01-테스트개발", timePolicy.getServerId());
+        assertEquals("DATE_BTIME", timePolicy.getLogId());
+        assertEquals(AnalyzeConstants.LOG_TYPE_TIME, timePolicy.getLogType());
+        assertEquals("<", timePolicy.getOperator());
+        assertEquals("08:00", timePolicy.getThresholdTime());
+    }
+
+    @Test
     void parse_invalid_format_returnsNull() {
         assertNull(parser.parse("dlprem01-테스트개발][DISK_HOME][수치][<][90][20]"));
         assertNull(parser.parse("[dlprem01-테스트개발][DISK_HOME][수치][<][90]"));
         assertNull(parser.parse("[dlprem01-테스트개발][DISK_HOME]"));
         assertNull(parser.parse("[dlprem01-테스트개발][DISK_HOME][수치][<][not_number][20]"));
         assertNull(parser.parse("[dlprem01-테스트개발][DISK_HOME][수치][<][90][not_number]"));
+        assertNull(parser.parse("[dlprem01-테스트개발][DATE_BTIME][시간][=][08:00]"));
+        assertNull(parser.parse("[dlprem01-테스트개발][DATE_BTIME][시간][<][8:00]"));
         assertNull(parser.parse("[dlprem01-테스트개발][X][알수없음]"));
     }
 
@@ -100,4 +130,3 @@ class AnalyzePolicyParserTest {
         assertNull(parser.parse("   # comment"));
     }
 }
-

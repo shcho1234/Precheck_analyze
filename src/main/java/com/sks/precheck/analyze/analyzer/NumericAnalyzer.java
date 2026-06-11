@@ -8,8 +8,10 @@ import com.sks.precheck.analyze.domain.policy.AnalyzePolicy;
 import com.sks.precheck.analyze.domain.policy.NumericPolicy;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.springframework.stereotype.Component;
 
 /**
@@ -22,10 +24,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class NumericAnalyzer implements LogAnalyzer {
 
-    private static final Logger log = LogManager.getLogger(NumericAnalyzer.class);
-
     private static final BigDecimal ONE_HUNDRED = new BigDecimal("100");
     private static final int CALC_SCALE = 6;
+    private static final Pattern DOLLAR_PATTERN = Pattern.compile("\\$([^$]+)\\$");
 
     @Override
     public AnalyzeResult analyze(CollectLog log, AnalyzePolicy policy) {
@@ -37,14 +38,7 @@ public class NumericAnalyzer implements LogAnalyzer {
 
         BigDecimal logValue = log.getLogValue();
         if (logValue == null) {
-            AnalyzeResult result = baseResult(log);
-            result.setAnalyzeLevel(AnalyzeConstants.LEVEL_ERROR);
-            result.setAnalyzeMessage("[" + AnalyzeConstants.LEVEL_ERROR + "][" + log.getLogId() + "] "
-                    + log.getLogContent() + " (수치값 없음)");
-            result.setThresholdValue(numericPolicy.getThreshold());
-            result.setThresholdOperator(numericPolicy.getOperator());
-            result.setWarningRatio(numericPolicy.getWarningRatio());
-            return result;
+            logValue = parseNumericFromLogContent(log.getLogContent());
         }
 
         BigDecimal threshold = numericPolicy.getThreshold();
@@ -56,6 +50,16 @@ public class NumericAnalyzer implements LogAnalyzer {
                     + ", logId: " + numericPolicy.getLogId());
         }
 
+        if (logValue == null) {
+            AnalyzeResult result = baseResult(log);
+            result.setAnalyzeLevel(AnalyzeConstants.LEVEL_UNANALYZED);
+            result.setAnalyzeMessage("[미분석][" + log.getLogId() + "] 포맷 불일치");
+            result.setThresholdValue(threshold);
+            result.setThresholdOperator(operator.trim());
+            result.setWarningRatio(warningRatio);
+            return result;
+        }
+
         String level = decideLevel(logValue, operator.trim(), threshold, warningRatio);
 
         AnalyzeResult result = baseResult(log);
@@ -63,6 +67,7 @@ public class NumericAnalyzer implements LogAnalyzer {
         result.setThresholdValue(threshold);
         result.setThresholdOperator(operator.trim());
         result.setWarningRatio(warningRatio);
+        result.setLogValue(logValue);
         result.setAnalyzeMessage(buildMessage(level, log.getLogId(), log.getLogContent(), logValue, operator.trim(), threshold, warningRatio));
         return result;
     }
@@ -148,8 +153,61 @@ public class NumericAnalyzer implements LogAnalyzer {
                     + "(임계치 대비 " + warningRatio.stripTrailingZeros().toPlainString() + "% 근접)";
         }
         if (AnalyzeConstants.LEVEL_ERROR.equals(level)) {
-            return "[" + level + "][" + logId + "] " + content + " " + logValue + " " + operator + " " + threshold + "(임계치)";
+            String opposite = oppositeOperator(operator);
+            return "[" + level + "][" + logId + "] " + content + " " + logValue + " " + opposite + " " + threshold + "(임계치)";
         }
         return "[" + level + "][" + logId + "] " + content + " " + logValue + " " + operator + " " + threshold + "(임계치)";
+    }
+
+    private String oppositeOperator(String operator) {
+        if ("<".equals(operator)) {
+            return ">=";
+        }
+        if ("<=".equals(operator)) {
+            return ">";
+        }
+        if (">".equals(operator)) {
+            return "<=";
+        }
+        if (">=".equals(operator)) {
+            return "<";
+        }
+        if ("=".equals(operator)) {
+            return "!=";
+        }
+        return operator;
+    }
+
+    private BigDecimal parseNumericFromLogContent(String logContent) {
+        if (logContent == null || logContent.isBlank()) {
+            return null;
+        }
+
+        List<String> candidates = new ArrayList<>();
+        Matcher matcher = DOLLAR_PATTERN.matcher(logContent);
+        while (matcher.find()) {
+            String token = matcher.group(1);
+            if (token == null) {
+                continue;
+            }
+            String trimmed = token.trim();
+            if (trimmed.isEmpty()) {
+                continue;
+            }
+            if (trimmed.contains(":")) {
+                continue;
+            }
+            candidates.add(trimmed);
+        }
+
+        if (candidates.size() != 1) {
+            return null;
+        }
+
+        try {
+            return new BigDecimal(candidates.get(0));
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 }

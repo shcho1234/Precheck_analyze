@@ -2,11 +2,13 @@ package com.sks.precheck.analyze.parser;
 
 import com.sks.precheck.analyze.common.constants.AnalyzeConstants;
 import com.sks.precheck.analyze.domain.policy.AnalyzePolicy;
+import com.sks.precheck.analyze.domain.policy.ComparePolicy;
 import com.sks.precheck.analyze.domain.policy.DatePolicy;
 import com.sks.precheck.analyze.domain.policy.ExistencePolicy;
 import com.sks.precheck.analyze.domain.policy.InfoPolicy;
 import com.sks.precheck.analyze.domain.policy.NumericPolicy;
 import com.sks.precheck.analyze.domain.policy.PhrasePolicy;
+import com.sks.precheck.analyze.domain.policy.TimePolicy;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +64,12 @@ public class AnalyzePolicyParser {
         }
         if (AnalyzeConstants.LOG_TYPE_INFO.equals(logType)) {
             return parseInfoPolicy(serverId, logId, tokens);
+        }
+        if (AnalyzeConstants.LOG_TYPE_COMPARE.equals(logType)) {
+            return parseComparePolicy(serverId, logId, tokens);
+        }
+        if (AnalyzeConstants.LOG_TYPE_TIME.equals(logType)) {
+            return parseTimePolicy(serverId, logId, tokens);
         }
 
         return null;
@@ -143,6 +151,46 @@ public class AnalyzePolicyParser {
         return policy;
     }
 
+    private ComparePolicy parseComparePolicy(String serverId, String logId, List<String> tokens) {
+        if (tokens.size() != 3) {
+            return null;
+        }
+
+        ComparePolicy policy = new ComparePolicy();
+        policy.setServerId(serverId);
+        policy.setLogId(logId);
+        return policy;
+    }
+
+    private TimePolicy parseTimePolicy(String serverId, String logId, List<String> tokens) {
+        if (tokens.size() != 5) {
+            return null;
+        }
+
+        String operator = tokens.get(3);
+        String thresholdTime = tokens.get(4);
+        if (isBlank(operator) || isBlank(thresholdTime)) {
+            return null;
+        }
+
+        String op = operator.trim();
+        if (!(">".equals(op) || ">=".equals(op) || "<".equals(op) || "<=".equals(op))) {
+            return null;
+        }
+
+        String time = thresholdTime.trim();
+        if (!isValidTimeHhmm(time)) {
+            return null;
+        }
+
+        TimePolicy policy = new TimePolicy();
+        policy.setServerId(serverId);
+        policy.setLogId(logId);
+        policy.setOperator(op);
+        policy.setThresholdTime(time);
+        return policy;
+    }
+
     private List<String> extractBracketTokens(String text) {
         int idx = 0;
         List<String> tokens = new ArrayList<>();
@@ -184,5 +232,28 @@ public class AnalyzePolicyParser {
 
     private boolean isBlank(String text) {
         return text == null || text.trim().isEmpty();
+    }
+
+    private boolean isValidTimeHhmm(String timeText) {
+        if (timeText == null || timeText.length() != 5) {
+            return false;
+        }
+        if (timeText.charAt(2) != ':') {
+            return false;
+        }
+
+        int hh;
+        int mm;
+        try {
+            hh = Integer.parseInt(timeText.substring(0, 2));
+            mm = Integer.parseInt(timeText.substring(3, 5));
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
+        if (hh < 0 || hh > 23) {
+            return false;
+        }
+        return mm >= 0 && mm <= 59;
     }
 }

@@ -1,10 +1,12 @@
 package com.sks.precheck.analyze.service;
 
+import com.sks.precheck.analyze.analyzer.CompareAnalyzer;
 import com.sks.precheck.analyze.analyzer.DateAnalyzer;
 import com.sks.precheck.analyze.analyzer.ExistenceAnalyzer;
 import com.sks.precheck.analyze.analyzer.InfoAnalyzer;
 import com.sks.precheck.analyze.analyzer.NumericAnalyzer;
 import com.sks.precheck.analyze.analyzer.PhraseAnalyzer;
+import com.sks.precheck.analyze.analyzer.TimeAnalyzer;
 import com.sks.precheck.analyze.common.constants.AnalyzeConstants;
 import com.sks.precheck.analyze.common.exception.AnalyzeException;
 import com.sks.precheck.analyze.common.util.SequenceHelper;
@@ -52,6 +54,8 @@ public class AnalyzeRetryService {
     private final DateAnalyzer dateAnalyzer;
     private final ExistenceAnalyzer existenceAnalyzer;
     private final InfoAnalyzer infoAnalyzer;
+    private final CompareAnalyzer compareAnalyzer;
+    private final TimeAnalyzer timeAnalyzer;
 
     public AnalyzeRetryService(
             SequenceHelper sequenceHelper,
@@ -63,7 +67,9 @@ public class AnalyzeRetryService {
             NumericAnalyzer numericAnalyzer,
             DateAnalyzer dateAnalyzer,
             ExistenceAnalyzer existenceAnalyzer,
-            InfoAnalyzer infoAnalyzer
+            InfoAnalyzer infoAnalyzer,
+            CompareAnalyzer compareAnalyzer,
+            TimeAnalyzer timeAnalyzer
     ) {
         this.sequenceHelper = sequenceHelper;
         this.collectLogMapper = collectLogMapper;
@@ -75,13 +81,14 @@ public class AnalyzeRetryService {
         this.dateAnalyzer = dateAnalyzer;
         this.existenceAnalyzer = existenceAnalyzer;
         this.infoAnalyzer = infoAnalyzer;
+        this.compareAnalyzer = compareAnalyzer;
+        this.timeAnalyzer = timeAnalyzer;
     }
 
-    // maxAttempts=4: 최초 1회 + 재시도 3회(10s 간격)
     @Retryable(
             retryFor = {AnalyzeException.class},
-            maxAttempts = 4,
-            backoff = @Backoff(delay = 10_000L)
+            maxAttemptsExpression = "#{T(com.sks.precheck.analyze.common.constants.AnalyzeConstants).MAX_RETRY_COUNT + 1}",
+            backoff = @Backoff(delayExpression = "#{T(com.sks.precheck.analyze.common.constants.AnalyzeConstants).RETRY_DELAY_MILLISECONDS}")
     )
     public int analyzeWithRetry(
             Long historyId,
@@ -261,6 +268,12 @@ public class AnalyzeRetryService {
         if (AnalyzeConstants.LOG_TYPE_INFO.equals(logType)) {
             return infoAnalyzer.analyze(logRow, policy);
         }
+        if (AnalyzeConstants.LOG_TYPE_COMPARE.equals(logType)) {
+            return compareAnalyzer.analyze(logRow, policy);
+        }
+        if (AnalyzeConstants.LOG_TYPE_TIME.equals(logType)) {
+            return timeAnalyzer.analyze(logRow, policy);
+        }
 
         return buildUnanalyzedResult(logRow);
     }
@@ -280,4 +293,3 @@ public class AnalyzeRetryService {
         return result;
     }
 }
-
