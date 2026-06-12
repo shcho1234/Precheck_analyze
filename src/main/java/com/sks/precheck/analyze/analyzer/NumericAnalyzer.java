@@ -148,6 +148,8 @@ public class NumericAnalyzer implements LogAnalyzer {
             BigDecimal threshold,
             BigDecimal warningRatio
     ) {
+        content = fillEmptyBracket(content, logValue);
+
         if (AnalyzeConstants.LEVEL_WARNING.equals(level)) {
             return "[" + level + "][" + logId + "] " + content + " " + logValue + " " + operator + " " + threshold
                     + "(임계치 대비 " + warningRatio.stripTrailingZeros().toPlainString() + "% 근접)";
@@ -157,6 +159,17 @@ public class NumericAnalyzer implements LogAnalyzer {
             return "[" + level + "][" + logId + "] " + content + " " + logValue + " " + opposite + " " + threshold + "(임계치)";
         }
         return "[" + level + "][" + logId + "] " + content + " " + logValue + " " + operator + " " + threshold + "(임계치)";
+    }
+
+    /**
+     * 수집 단계에서 $값$ 토큰이 제거되어 로그 내용에 남은 빈 "[]"를
+     * logValue(소수점 2자리)로 채워 보여준다.
+     */
+    private String fillEmptyBracket(String content, BigDecimal logValue) {
+        if (content == null || !content.contains("[]")) {
+            return content;
+        }
+        return content.replaceFirst("\\[]", "[" + logValue.setScale(2, RoundingMode.DOWN) + "]");
     }
 
     private String oppositeOperator(String operator) {

@@ -1,6 +1,7 @@
 package com.sks.precheck.analyze.domain;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
 public class AnalyzeResult {
@@ -103,7 +104,7 @@ public class AnalyzeResult {
     }
 
     public void setLogValue(BigDecimal logValue) {
-        this.logValue = logValue;
+        this.logValue = logValue == null ? null : logValue.setScale(2, RoundingMode.DOWN);
     }
 
     public String getAnalyzeLevel() {

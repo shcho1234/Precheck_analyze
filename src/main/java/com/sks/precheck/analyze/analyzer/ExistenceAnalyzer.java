@@ -19,14 +19,20 @@ public class ExistenceAnalyzer implements LogAnalyzer {
     private static final Logger log = LogManager.getLogger(ExistenceAnalyzer.class);
 
     @Override
-    public AnalyzeResult analyze(CollectLog log, AnalyzePolicy policy) {
+    public AnalyzeResult analyze(CollectLog collectLog, AnalyzePolicy policy) {
+        log.debug("ExistenceAnalyzer.analyze called for collectLogId={}", collectLog != null ? collectLog.getCollectLogId() : null);
+
         if (!(policy instanceof ExistencePolicy)) {
             throw new AnalyzeException("존재형 정책이 아니다: " + policy);
         }
 
-        AnalyzeResult result = baseResult(log);
+        if (collectLog == null) {
+            throw new AnalyzeException("collectLog is null");
+        }
+
+        AnalyzeResult result = baseResult(collectLog);
         result.setAnalyzeLevel(AnalyzeConstants.LEVEL_ERROR);
-        result.setAnalyzeMessage("[" + AnalyzeConstants.LEVEL_ERROR + "][" + log.getLogId() + "] " + log.getLogContent());
+        result.setAnalyzeMessage("[" + AnalyzeConstants.LEVEL_ERROR + "][" + collectLog.getLogId() + "] " + collectLog.getLogContent());
         return result;
     }
 

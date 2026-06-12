@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,8 +19,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class DateAnalyzer implements LogAnalyzer {
-
-    private static final Logger log = LogManager.getLogger(DateAnalyzer.class);
 
     private static final DateTimeFormatter LOG_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd");
     // 수집 로그 타임스탬프 포맷(yyyy/MM/dd HH:mm:ss.SSS)과 동일한 슬래시 구분자 사용

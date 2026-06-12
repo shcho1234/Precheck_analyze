@@ -2,6 +2,7 @@ package com.sks.precheck.analyze.parser;
 
 import com.sks.precheck.analyze.common.constants.AnalyzeConstants;
 import com.sks.precheck.analyze.domain.policy.AnalyzePolicy;
+import com.sks.precheck.analyze.domain.policy.ComparePolicy;
 import com.sks.precheck.analyze.domain.policy.DatePolicy;
 import com.sks.precheck.analyze.domain.policy.ExistencePolicy;
 import com.sks.precheck.analyze.domain.policy.InfoPolicy;
@@ -11,8 +12,6 @@ import com.sks.precheck.analyze.domain.policy.TimePolicy;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 /**
@@ -23,8 +22,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class AnalyzePolicyParser {
-
-    private static final Logger log = LogManager.getLogger(AnalyzePolicyParser.class);
 
     public AnalyzePolicy parse(String line) {
         if (line == null) {
@@ -150,27 +147,15 @@ public class AnalyzePolicyParser {
         return policy;
     }
 
-    private AnalyzePolicy parseComparePolicy(String serverId, String logId, List<String> tokens) {
+    private ComparePolicy parseComparePolicy(String serverId, String logId, List<String> tokens) {
         if (tokens.size() != 3) {
             return null;
         }
 
-        return new AnalyzePolicy() {
-            @Override
-            public String getServerId() {
-                return serverId;
-            }
-
-            @Override
-            public String getLogId() {
-                return logId;
-            }
-
-            @Override
-            public String getLogType() {
-                return AnalyzeConstants.LOG_TYPE_COMPARE;
-            }
-        };
+        ComparePolicy policy = new ComparePolicy();
+        policy.setServerId(serverId);
+        policy.setLogId(logId);
+        return policy;
     }
 
     private TimePolicy parseTimePolicy(String serverId, String logId, List<String> tokens) {

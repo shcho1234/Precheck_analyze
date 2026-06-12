@@ -20,20 +20,22 @@ public class PhraseAnalyzer implements LogAnalyzer {
     private static final Logger log = LogManager.getLogger(PhraseAnalyzer.class);
 
     @Override
-    public AnalyzeResult analyze(CollectLog log, AnalyzePolicy policy) {
+    public AnalyzeResult analyze(CollectLog collectLog, AnalyzePolicy policy) {
         if (!(policy instanceof PhrasePolicy)) {
             throw new AnalyzeException("문구형 정책이 아니다: " + policy);
         }
 
         PhrasePolicy phrasePolicy = (PhrasePolicy) policy;
-        String logContent = log.getLogContent();
+        String logContent = collectLog.getLogContent();
 
         String matchedKeyword = findMatchedKeyword(logContent, phrasePolicy.getErrorKeywords());
         String level = matchedKeyword == null ? AnalyzeConstants.LEVEL_NORMAL : AnalyzeConstants.LEVEL_ERROR;
 
-        AnalyzeResult result = baseResult(log);
+        log.debug("Analyzing logId={}, matchedKeyword={}, level={}", collectLog.getLogId(), matchedKeyword, level);
+
+        AnalyzeResult result = baseResult(collectLog);
         result.setAnalyzeLevel(level);
-        result.setAnalyzeMessage(buildMessage(level, log.getLogId(), logContent, matchedKeyword));
+        result.setAnalyzeMessage(buildMessage(level, collectLog.getLogId(), logContent, matchedKeyword));
         return result;
     }
 

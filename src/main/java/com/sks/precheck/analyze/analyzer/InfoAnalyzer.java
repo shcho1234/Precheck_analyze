@@ -6,8 +6,6 @@ import com.sks.precheck.analyze.domain.AnalyzeResult;
 import com.sks.precheck.analyze.domain.CollectLog;
 import com.sks.precheck.analyze.domain.policy.AnalyzePolicy;
 import com.sks.precheck.analyze.domain.policy.InfoPolicy;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,8 +13,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class InfoAnalyzer implements LogAnalyzer {
-
-    private static final Logger log = LogManager.getLogger(InfoAnalyzer.class);
 
     @Override
     public AnalyzeResult analyze(CollectLog log, AnalyzePolicy policy) {
