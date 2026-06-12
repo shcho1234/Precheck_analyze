@@ -50,6 +50,25 @@ class CompareAnalyzerTest {
         assertTrue(result.getAnalyzeMessage().contains("불일치"));
     }
 
+    @Test
+    void logValueNull_canAnalyzeUsingRawLog() {
+        ComparePolicy policy = new ComparePolicy();
+        policy.setServerId("dlprem01-테스트개발");
+        policy.setLogId("JUCHE_DIFF_01");
+
+        CollectLog log = baseCollectLog();
+        log.setLogType(AnalyzeConstants.LOG_TYPE_COMPARE);
+        log.setLogId("JUCHE_DIFF_01");
+        log.setLogValue(null);
+        log.setLogContent("실시간정산 #1 수신 처리");
+        log.setRawLog("@@@[2026/04/21 12:12:32.123][비교][JUCHE_DIFF_01]|실시간정산 #1 수신$123$ 처리$120$|@@@");
+
+        AnalyzeResult result = analyzer.analyze(log, policy);
+        assertEquals(AnalyzeConstants.LEVEL_ERROR, result.getAnalyzeLevel());
+        assertTrue(result.getAnalyzeMessage().contains("A=123"));
+        assertTrue(result.getAnalyzeMessage().contains("B=120"));
+    }
+
     private CollectLog baseCollectLog() {
         CollectLog log = new CollectLog();
         log.setCollectLogId(1L);

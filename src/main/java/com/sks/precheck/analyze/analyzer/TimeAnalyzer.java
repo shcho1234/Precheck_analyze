@@ -6,6 +6,7 @@ import com.sks.precheck.analyze.domain.AnalyzeResult;
 import com.sks.precheck.analyze.domain.CollectLog;
 import com.sks.precheck.analyze.domain.policy.AnalyzePolicy;
 import com.sks.precheck.analyze.domain.policy.TimePolicy;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -24,7 +25,8 @@ public class TimeAnalyzer implements LogAnalyzer {
         }
 
         TimePolicy timePolicy = (TimePolicy) policy;
-        String timeText = parseSingleTime(log.getLogContent());
+        String contentWithTokens = extractContentWithTokens(log);
+        String timeText = parseSingleTime(contentWithTokens);
         if (timeText == null) {
             AnalyzeResult result = baseResult(log);
             result.setAnalyzeLevel(AnalyzeConstants.LEVEL_UNANALYZED);
@@ -41,7 +43,10 @@ public class TimeAnalyzer implements LogAnalyzer {
 
         AnalyzeResult result = baseResult(log);
         result.setAnalyzeLevel(level);
-        result.setAnalyzeMessage(buildMessage(level, log.getLogId(), log.getLogContent(), operator, timePolicy.getThresholdTime()));
+        result.setLogValue(BigDecimal.valueOf(logMinutes));
+        result.setThresholdValue(BigDecimal.valueOf(thresholdMinutes));
+        result.setThresholdOperator(operator);
+        result.setAnalyzeMessage(buildMessage(level, log.getLogId(), log.getLogContent(), timeText, operator, timePolicy.getThresholdTime()));
         return result;
     }
 
@@ -58,11 +63,11 @@ public class TimeAnalyzer implements LogAnalyzer {
         return result;
     }
 
-    private String buildMessage(String level, String logId, String content, String operator, String thresholdTime) {
+    private String buildMessage(String level, String logId, String content, String timeText, String operator, String thresholdTime) {
         if (AnalyzeConstants.LEVEL_ERROR.equals(level)) {
-            return "[" + level + "][" + logId + "] " + content + " " + oppositeOperator(operator) + " " + thresholdTime + "(임계치)";
+            return "[" + level + "][" + logId + "] " + content + " " + timeText + " " + oppositeOperator(operator) + " " + thresholdTime + "(임계치)";
         }
-        return "[" + level + "][" + logId + "] " + content + " " + operator + " " + thresholdTime + "(임계치)";
+        return "[" + level + "][" + logId + "] " + content + " " + timeText + " " + operator + " " + thresholdTime + "(임계치)";
     }
 
     private String parseSingleTime(String content) {
@@ -94,6 +99,41 @@ public class TimeAnalyzer implements LogAnalyzer {
             return null;
         }
         return candidates.get(0);
+    }
+
+    private String extractContentWithTokens(CollectLog log) {
+        if (log == null) {
+            return null;
+        }
+
+        String content = log.getLogContent();
+        if (content != null && content.contains("$")) {
+            return content;
+        }
+
+        String rawLog = log.getRawLog();
+        String rawContent = extractContentFromRawLog(rawLog);
+        if (rawContent != null && rawContent.contains("$")) {
+            return rawContent;
+        }
+
+        return content;
+    }
+
+    private String extractContentFromRawLog(String rawLog) {
+        if (rawLog == null || rawLog.isBlank()) {
+            return null;
+        }
+
+        int firstPipe = rawLog.indexOf('|');
+        if (firstPipe < 0) {
+            return null;
+        }
+        int secondPipe = rawLog.indexOf('|', firstPipe + 1);
+        if (secondPipe < 0) {
+            return null;
+        }
+        return rawLog.substring(firstPipe + 1, secondPipe);
     }
 
     private boolean isValidTimeHhmm(String timeText) {
@@ -158,4 +198,3 @@ public class TimeAnalyzer implements LogAnalyzer {
         return operator;
     }
 }
-

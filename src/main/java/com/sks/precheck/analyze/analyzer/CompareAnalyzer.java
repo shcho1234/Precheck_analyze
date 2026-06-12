@@ -5,7 +5,6 @@ import com.sks.precheck.analyze.common.exception.AnalyzeException;
 import com.sks.precheck.analyze.domain.AnalyzeResult;
 import com.sks.precheck.analyze.domain.CollectLog;
 import com.sks.precheck.analyze.domain.policy.AnalyzePolicy;
-import com.sks.precheck.analyze.domain.policy.ComparePolicy;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +19,12 @@ public class CompareAnalyzer implements LogAnalyzer {
 
     @Override
     public AnalyzeResult analyze(CollectLog log, AnalyzePolicy policy) {
-        if (!(policy instanceof ComparePolicy)) {
+        if (!"ComparePolicy".equals(policy.getClass().getSimpleName())) {
             throw new AnalyzeException("비교형 정책이 아니다: " + policy);
         }
 
-        ParsedTwoNumbers parsed = parseTwoNumbers(log.getLogContent());
+        String contentWithTokens = extractContentWithTokens(log);
+        ParsedTwoNumbers parsed = parseTwoNumbers(contentWithTokens);
         if (parsed == null) {
             AnalyzeResult result = baseResult(log);
             result.setAnalyzeLevel(AnalyzeConstants.LEVEL_UNANALYZED);
@@ -98,6 +98,41 @@ public class CompareAnalyzer implements LogAnalyzer {
         }
     }
 
+    private String extractContentWithTokens(CollectLog log) {
+        if (log == null) {
+            return null;
+        }
+
+        String content = log.getLogContent();
+        if (content != null && content.contains("$")) {
+            return content;
+        }
+
+        String rawLog = log.getRawLog();
+        String rawContent = extractContentFromRawLog(rawLog);
+        if (rawContent != null && rawContent.contains("$")) {
+            return rawContent;
+        }
+
+        return content;
+    }
+
+    private String extractContentFromRawLog(String rawLog) {
+        if (rawLog == null || rawLog.isBlank()) {
+            return null;
+        }
+
+        int firstPipe = rawLog.indexOf('|');
+        if (firstPipe < 0) {
+            return null;
+        }
+        int secondPipe = rawLog.indexOf('|', firstPipe + 1);
+        if (secondPipe < 0) {
+            return null;
+        }
+        return rawLog.substring(firstPipe + 1, secondPipe);
+    }
+
     private static class ParsedTwoNumbers {
         private final BigDecimal a;
         private final BigDecimal b;
@@ -108,4 +143,3 @@ public class CompareAnalyzer implements LogAnalyzer {
         }
     }
 }
-

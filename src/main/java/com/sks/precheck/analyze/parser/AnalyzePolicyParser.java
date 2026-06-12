@@ -2,7 +2,6 @@ package com.sks.precheck.analyze.parser;
 
 import com.sks.precheck.analyze.common.constants.AnalyzeConstants;
 import com.sks.precheck.analyze.domain.policy.AnalyzePolicy;
-import com.sks.precheck.analyze.domain.policy.ComparePolicy;
 import com.sks.precheck.analyze.domain.policy.DatePolicy;
 import com.sks.precheck.analyze.domain.policy.ExistencePolicy;
 import com.sks.precheck.analyze.domain.policy.InfoPolicy;
@@ -151,15 +150,27 @@ public class AnalyzePolicyParser {
         return policy;
     }
 
-    private ComparePolicy parseComparePolicy(String serverId, String logId, List<String> tokens) {
+    private AnalyzePolicy parseComparePolicy(String serverId, String logId, List<String> tokens) {
         if (tokens.size() != 3) {
             return null;
         }
 
-        ComparePolicy policy = new ComparePolicy();
-        policy.setServerId(serverId);
-        policy.setLogId(logId);
-        return policy;
+        return new AnalyzePolicy() {
+            @Override
+            public String getServerId() {
+                return serverId;
+            }
+
+            @Override
+            public String getLogId() {
+                return logId;
+            }
+
+            @Override
+            public String getLogType() {
+                return AnalyzeConstants.LOG_TYPE_COMPARE;
+            }
+        };
     }
 
     private TimePolicy parseTimePolicy(String serverId, String logId, List<String> tokens) {

@@ -7,6 +7,7 @@ import com.sks.precheck.analyze.common.constants.AnalyzeConstants;
 import com.sks.precheck.analyze.domain.AnalyzeResult;
 import com.sks.precheck.analyze.domain.CollectLog;
 import com.sks.precheck.analyze.domain.policy.TimePolicy;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 
@@ -29,6 +30,10 @@ class TimeAnalyzerTest {
 
         AnalyzeResult result = analyzer.analyze(log, policy);
         assertEquals(AnalyzeConstants.LEVEL_NORMAL, result.getAnalyzeLevel());
+        assertEquals(new BigDecimal("455"), result.getLogValue());
+        assertEquals(new BigDecimal("480"), result.getThresholdValue());
+        assertEquals("<", result.getThresholdOperator());
+        assertTrue(result.getAnalyzeMessage().contains("07:35"));
         assertTrue(result.getAnalyzeMessage().contains("< 08:00"));
     }
 
@@ -47,6 +52,34 @@ class TimeAnalyzerTest {
 
         AnalyzeResult result = analyzer.analyze(log, policy);
         assertEquals(AnalyzeConstants.LEVEL_ERROR, result.getAnalyzeLevel());
+        assertEquals(new BigDecimal("550"), result.getLogValue());
+        assertEquals(new BigDecimal("480"), result.getThresholdValue());
+        assertEquals("<", result.getThresholdOperator());
+        assertTrue(result.getAnalyzeMessage().contains("09:10"));
+        assertTrue(result.getAnalyzeMessage().contains(">= 08:00"));
+    }
+
+    @Test
+    void logValueNull_canAnalyzeUsingRawLog() {
+        TimePolicy policy = new TimePolicy();
+        policy.setServerId("dlprem01-테스트개발");
+        policy.setLogId("DATE_BTIME");
+        policy.setOperator("<");
+        policy.setThresholdTime("08:00");
+
+        CollectLog log = baseCollectLog();
+        log.setLogType(AnalyzeConstants.LOG_TYPE_TIME);
+        log.setLogId("DATE_BTIME");
+        log.setLogValue(null);
+        log.setLogContent("처리시간");
+        log.setRawLog("@@@[2026/04/21 12:12:32.123][시간][DATE_BTIME]|bday[2026/04/22] 처리시간 $09:10$|@@@");
+
+        AnalyzeResult result = analyzer.analyze(log, policy);
+        assertEquals(AnalyzeConstants.LEVEL_ERROR, result.getAnalyzeLevel());
+        assertEquals(new BigDecimal("550"), result.getLogValue());
+        assertEquals(new BigDecimal("480"), result.getThresholdValue());
+        assertEquals("<", result.getThresholdOperator());
+        assertTrue(result.getAnalyzeMessage().contains("09:10"));
         assertTrue(result.getAnalyzeMessage().contains(">= 08:00"));
     }
 
@@ -64,4 +97,3 @@ class TimeAnalyzerTest {
         return log;
     }
 }
-
